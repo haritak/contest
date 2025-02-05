@@ -1,0 +1,25 @@
+<p style="color: green"><%= notice %></p>
+
+<div class="container">
+  <%= render @teacher %>
+
+  <% if current_user.is_admin? %>
+    <div class="row d-flex justify-content-center">
+      <div class="d-flex justify-content-center mb-3">
+        <%= link_to "Διόρθωση", edit_teacher_path(@teacher), class: "btn btn-sm btn-outline-primary" %>
+        <% if @teacher.finalized? %>
+          <%= button_to 'Αφ. οριστ.', unfinalize_teacher_path(@teacher), class: "btn btn-sm btn-outline-success", title: "Αφαίρεση Οριστικοποίησης" %>
+        <% else %>
+          <%= button_to "οριστικοπ.", make_final_teacher_path(@teacher), class: "btn btn-sm btn-outline-dark", title: "Οριστικοποίηση"%>
+        <% end %>
+        <%= button_to "Διαγραφή", @teacher, method: :delete, class: "btn btn-sm btn-outline-danger",
+          form: {data: { turbo_confirm: 'Να προχωρήσω στην διαγραφή;' },  }%>
+      </div>
+    </div>
+  <% end %>
+  <div class="row d-flex justify-content-center">
+    <div class="d-flex justify-content-center mb-3">
+      <%= link_to "Πίσω", :back, class: "btn btn-outline-success" %>
+    </div>
+  </div>
+</div>

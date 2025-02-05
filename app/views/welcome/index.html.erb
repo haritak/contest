@@ -1,0 +1,11 @@
+<% if not current_user %>
+  <%= render "welcome" %>
+<% elsif current_user.is_admin? %>
+  <%= render "welcome_admin" %>
+<% elsif current_user.is_secretary? %>
+  <%= render "welcome_secretary" %>
+<% elsif current_user.is_reviewer? %>
+  <%= render "welcome_reviewer" %>
+<% else %>
+  <%= render "welcome_participant" %>
+<% end %>

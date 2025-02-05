@@ -1,0 +1,222 @@
+<% thumb_size = session[:thumb_size].present? ? session[:thumb_size].to_i : 50 %>
+<% thumb_container_height = thumb_size + 50 %>
+<% thumb_container_width = thumb_size + 30 %>
+
+<div class="container">
+
+  <div class="row fixed-bottom">
+    <div class="col text-end">
+
+      <button type="button" class="btn btn-sm btn-outline-dark m-1" data-bs-toggle="modal" data-bs-target="#exampleModal">
+        <small>Ρυθμίσεις</small>
+      </button>
+    </div>
+  </div>
+
+      <!-- Modal -->
+      <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+          <div class="modal-content">
+            <div class="modal-header">
+              <h1 class="modal-title fs-5" id="exampleModalLabel">Ρυθμίσεις Προβολής</h1>
+              <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+
+              <% form_url = review_index_path(@student_category, @student_submission_type.id) %>
+              <%= form_with url: form_url, method: :get, scope: :tags do |form| %>
+                <% @tags_to_show.each do |tag| %>
+                  <%= form.check_box tag.name %>
+                  <%= form.label tag.name %>
+                <% end %><br/>
+                <%= form.submit "εφαρμογή ετικετών", class: "btn btn-sm btn-outline-dark" %>
+              <% end %>
+              <br/>
+              <%= form_with url: student_files_set_thumbnail_size_url do  |form| %>
+                <%= form.number_field :thumb_size, in: 50..1300, step: 50, placeholder: session[:thumb_size] %>
+                <br/>
+                <%= form.submit "εφαρμογή μεγέθους εικονιδίων", class: "btn btn-sm btn-outline-dark"%>
+              <% end %>
+
+            </div>
+          </div>
+        </div>
+      </div>
+
+  <div class="row">
+    <div class="col text-center">
+      <h1><%= @title %></h1>
+    </div>
+  </div>
+
+
+  <div class="row">
+    <div class="col text-center">
+        <h1><%= @active_tags.join(" ") %></h1>
+    </div>
+  </div>
+
+  <div class="row m-1 text-center">
+    <div class="col" data-turbo-prefetch="false">
+      <center>
+        <%== pagy_nav(@pagy) if @pagy.pages > 1 %>
+      </center>
+    </div>
+  </div>
+
+  <div class="row">
+    <% if @student_submissions.count == 0 %>
+      Δεν βρέθηκαν φωτογραφίες
+    <% end %>
+  </div>
+
+
+  <div class="row">
+    <% @student_submissions.each do |student_submission| %>
+      <% class_style = "col mb-1 text-center border rounded" %>
+      <% class_style = "container-fluid mb-5 justify-center border rounder" if thumb_size >= 700 %>
+      <div id="photo_of_ssid_<%= student_submission.id %>" class="<%= class_style %>">
+        <div class="m-1 text-center w-auto" style="height: <%= thumb_container_height %>px; width: <%= thumb_container_width %>px">
+          <% if thumb_size > 100 %>
+            <small>Υποβολή <%= student_submission.id %></small><br />
+          <% end %>
+          <% if student_submission.file.representable? %>
+            <%= turbo_frame_tag "review_preview_of_#{student_submission.id}", src: thumbnail_student_submission_path(student_submission, thumb_size: @thumb_size), loading: :lazy do %>
+              <small><em>Loading...</em></small>
+            <% end %>
+          <% else %>
+            file not representable
+          <% end %>
+          <% if thumb_size > 500 %>
+            <% nxt_id = prv_id = 0 %>
+            <% cur_id = @student_submission_ids.index(student_submission.id) %>
+            <% nxt_id = cur_id.succ if cur_id.succ < @student_submission_ids.count %>
+            <% prv_id = cur_id.pred if cur_id.pred > 0 %>
+            <%# link_to "← ", "#photo_of_ssid_#{@student_submission_ids[prv_id]}", class: "link-underline link-underline-opacity-0" %>
+            <%# link_to "→", "#photo_of_ssid_#{@student_submission_ids[nxt_id]}", class: "link-underline link-underline-opacity-0" %>
+          <% end %>
+        </div>
+          <% if not current_user.is_reviewer? %>
+            <% if student_submission.finalized? %>
+              <!--
+                <span class="badge rounded-pill bg-success" title="Οριστικοποιημένο αρχείο">
+                Οριστ.
+                </span>
+              -->
+            <% else %>
+              <span class="badge rounded-pill bg-warning" title="μη οριστικοποιημένο αρχείο">
+                μη οριστ.
+              </span>
+            <% end %>
+          <% end %>
+          <% if thumb_size > 200 %>
+            <% if student_submission.file.analyzed? %>
+              <% max_dimension_pixels = [student_submission.file.metadata['width'], student_submission.file.metadata['height']].max %>
+              <% if max_dimension_pixels < 3000 %>
+                <span class="badge rounded-pill text-bg-secondary text-wrap" 
+                      title="Η μεγαλύτερη πλευρά να μην είναι μικρότερη από 3000 pixel">
+                  <small><%= "#{student_submission.file.metadata['width']}x#{student_submission.file.metadata['height']}" %></small>
+                </span>
+              <% end %>
+              <% if student_submission.file.byte_size < 2.megabytes %>
+                <span class="badge rounded-pill text-bg-secondary text-wrap" 
+                      title="Το αρχείο είναι μικρότερο του επιτρεπτου. Το αρχείο θα πρέπει να είναι τουλάχιστον 2MB">
+                  <small><%= "#{student_submission.file.byte_size/1.kilobyte} KB" %></small>
+                </span>
+              <% end %>
+            <% else %>
+              file not analyzed
+            <% end %>
+          <br/>
+          <small>
+            <small>
+              <% if current_user.is_admin? %>
+                <%= link_to student_path(student_submission.student) do %>
+                  <%= student_submission.student.is_adult? ? "Μ" : "μ"%><%= student_submission.student_id %>
+                <% end %>
+                <%= link_to "Σ#{student_submission.user.id}", team_path(student_submission.team) if student_submission.team %>
+              <% elsif current_user.is_secretary? %>
+                <%= student_submission.student.person.short_name %>
+                <%= student_submission.user.team&.school&.name %>
+              <% else %>
+                Μ<%= student_submission.student_id %> Σ<%= student_submission.user.id %>
+            <% end %>
+            </small>
+          </small>
+          <br />
+          <% if current_user.is_admin? or current_user.is_secretary? %>
+            <% if student_submission.team&.participation_finalized? %> 
+              <!--
+                <span title="έχει κάνει υποβολή συμμετοχής">✓</span>
+              -->
+            <% else %>
+              <small><small><span title="ΔΕΝ έχει κάνει υποβολή συμμετοχής!">🚫</span></small></small>
+            <% end %>
+            <br/>
+          <% end %>
+        <% end %>
+
+        <% if thumb_size > 200 %> 
+          <%= turbo_frame_tag "tags_for_#{student_submission.id}" do %>
+            <div class="border-top">
+              <div class="row">
+                <div class="col">
+                  <% student_submission.student_submission_user_tags.each do |ssut| %>
+                    <% next if current_user.is_reviewer? and ssut.user != current_user %>
+                    <span title="<%= ssut.tag.description %>">
+                      <% if current_user.is_secretary? %>
+                        <span class="badge" style="color: <%=ssut.tag.color%>">
+                          <%= ssut.tag.name %>
+                          <% if ssut.user != current_user %>
+                            <small>(<%= ssut.user.email %>)</small>
+                          <% end %>
+                        </span>
+                      <% else %>
+                        <%= button_to delete_selected_tag_student_submission_path(student_submission, ssu_tag_id: ssut.id), method: :delete, style: "color: #{ssut.tag.color}", class: "badge", form: {class: "d-inline"} do %>
+                          <%= ssut.tag.name %>
+                          <% if ssut.user != current_user %>
+                            <small>(<%= ssut.user.email %>)</small>
+                          <% end %>
+                        <% end %>
+                      <% end %>
+                    </span>
+                  <% end %>
+                </div>
+              </div>
+              <% if not current_user.is_secretary? %>
+                <div class="row">
+                  <div class="col">
+                    <%= button_to "τρέχουσα", 
+                      apply_active_tag_student_submission_path(student_submission), 
+                      class: "btn btn-sm btn-outline-dark m-1 border-0", form: {class: "d-inline"} %>
+                    <div class="dropdown">
+                      <button class="btn btn-sm btn-outline-secondary dropdown-toggle border-0 m-1" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+                        άλλη
+                      </button>
+                      <ul class="dropdown-menu">
+                        <% @tags_to_show.each do |tag| %>
+                          <li class="dropdown-item">
+                            <%= button_to "#{tag.name}", apply_specific_tag_student_submission_path(student_submission, specific_tag_id: tag.id), class: "btn btn-sm", style: "color: #{tag.color}" %>
+                          </li>
+                        <% end %>
+                      </ul>
+                    </div>
+                  </div>
+                </div>
+              <% end %>
+            </div>
+          <% end %>
+        <% end %>
+      </div>
+    <% end %>
+  </div>
+
+  <div class="row m-1 text-center">
+    <div class="col" data-turbo-prefetch="false">
+      <center>
+        <%== pagy_nav(@pagy) if @pagy.pages > 1 %>
+      </center>
+    </div>
+  </div>
+
+</div>

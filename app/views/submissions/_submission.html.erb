@@ -1,0 +1,71 @@
+<%= turbo_frame_tag submission do %>
+  <div id="<%= dom_id submission %>">
+    <div class="container my-1">
+      <div class="row">
+        <div class="col-7">
+          <div class="card">
+            <div class="card-body">
+              <h4 class="card-title">
+                <%= submission.submission_type.submission_type %>
+              </h4>
+              <p><%= submission.submission_description %></p>
+              <%= link_to submission.submission_file.filename, user_files_path(submission), {data: {turbo: false}, target: "_blank"} if submission.submission_file.attached? %>
+              <% if submission.submission_file.analyzed? %>
+                <% if submission.submission_file.content_type =~ /zip/ %>
+                  (αριθμός αρχείων: <%= submission.submission_file.metadata['file_count'] %>)
+                <% elsif submission.submission_file.content_type =~ /pdf/ %>
+                  (αριθμός σελίδων: <%= submission.submission_file.metadata['page_count'] %>)
+                <% end %>
+              <% else %>
+                <span title="Κάντε κλικ για ανανέωση της κατάστασης του αρχείου">
+                  <%= link_to "(έλεγχος αρχείου σε εξέλιξη)", root_path %>
+                </span>
+              <% end %>
+
+              <% if current_user&.is_admin? %>
+                <ul>
+                  <li>
+                    <strong>Υποβλήθηκε από:</strong>
+                    <%= submission.user.email %>
+                  </li>
+                  <li>
+                    <strong>Οριστικοποιημένη;</strong> <%= submission.finalized? %><br/>
+                    <strong>Ημερομηνία:</strong> <%= submission.finalized_date %><br/>
+                    <% if submission.finalized? %>
+                      <%= button_to 'Αφαίρεση οριστικοποίησης', unfinalize_submission_path(submission) %>
+                    <% end %>
+                  </li>
+                </ul>
+              <% end %>
+            </div> <!-- card body -->
+          </div> <!-- card -->
+        </div><!--column-->
+        <div class="col-1">
+          <% if not submission.finalized? and current_user and not current_user.is_admin? %>
+            <%= button_to "οριστικοποίηση", make_final_submission_path(submission), class: "btn btn-success", form: {data: { turbo_confirm: 'Να προχωρήσω στην οριστικοποίηση;', turbo_frame: "_top"}} %>
+            <%= link_to "Διόρθωση", edit_submission_path(submission), type: "button", class: "btn btn-link link-dark" %>
+            <%= button_to "Διαγραφή", submission, 
+              method: :delete, 
+              type: "button", 
+              class: "btn btn-link link-danger", 
+              form: {data: { turbo_confirm: 'Να προχωρήσω στην διαγραφή;', turbo_frame: "_top" }} %>
+          <% else %>
+            <!-- [έχει οριστικοποιηθεί] -->
+            <!--
+            <% if submission.reviewed? %>
+              <span class="badge rounded-pill bg-primary" title="Έγινε ο έλεγχος του αρχείου από την γραμματεία και είναι εντάξει. Ευχαριστούμε πολύ!">
+                Επιτυχής έλεγχος
+              </span>
+            <% else %>
+              <span class="badge rounded-pill bg-warning" title="Έγινε ο έλεγχος του αρχείου από την γραμματεία και είναι εντάξει. Ευχαριστούμε πολύ!">
+                Σε εκκρεμότητα ο έλεγχος<br />
+                του αρχείου από την γραμματεία
+              </span>
+            <% end %>
+            -->
+          <% end %>
+        </div>
+      </div> <!-- row -->
+    </div> <!-- container -->
+  </div>
+<% end %>

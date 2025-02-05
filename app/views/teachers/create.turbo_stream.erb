@@ -1,0 +1,5 @@
+<%= turbo_stream.append "team_teacher_members", 
+  partial: "teacher", locals: {teacher: @teacher} %>
+
+<%= turbo_stream.update "teachers_header", partial: "teachers_header", 
+  locals: {teachers: current_user.teachers} %>

@@ -1,0 +1,25 @@
+<div id="<%= dom_id student_submission_type %>">
+  <tr>
+    <td>
+      <strong><%= student_submission_type.name %></strong>
+    </td>
+    <td>
+      <%= student_submission_type.description %>
+    </td>
+    <td>
+      <%= student_submission_type.accepted_filetype %>
+    </td>
+    <td>
+      <%= student_submission_type.max_submissions %>
+    </td>
+    <td>
+      <%= student_submission_type.optional? ? "(OPTIONAL)" : "" %>
+    </td>
+    <td>
+      <%= link_to "Edit", edit_student_submission_type_path(student_submission_type) %>
+    </td>
+    <td>
+      <%= button_to "Destroy", student_submission_type, method: :delete %>
+    </td>
+  </tr>
+</div>

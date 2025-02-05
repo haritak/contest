@@ -1,0 +1,80 @@
+<%= turbo_frame_tag student do %>
+  <% border_color = student.person.female? ? "border-danger-subtle" : "border-info-subtle" %>
+  <div class="container mt-2">
+    <div class="row align-items-center">
+      <div class="col">
+        <span class="fs-4">
+          <a class="link link-dark" data-bs-toggle="collapse" href="#student_collapse_<%= student.id %>" role="button" aria-expanded="false" aria-controls="student_collapse_<%= student.id %>">
+            <%= student.person.short_name %>⌄ 
+          </a>
+          : Αρχεία <%= student.person.tou_mathiti %>
+        </span>
+        <% if current_user %>
+          <%= turbo_frame_tag "student_#{student.id}_new_submission" do %>
+            <%= render partial: "student_submissions/student_submissions_header", locals: {student: student} %>
+          <% end %>
+        <% end %>
+      </div>
+    </div>
+    <div class="row border rounded <%= border_color %> mb-2 collapse" id="student_collapse_<%= student.id %>">
+      <div class="col"><!-- column 1 -->
+        <%= render "people/person", person: student.person %>
+        Τάξη <%= student.school_class.school_class %>
+      <%= student.adult_to_s %>
+      </div>
+      <% if current_user and student.person.user == current_user %>
+        <div class="col"> <!-- column 2 -->
+          <% if @site_setting.allow_autonomous_submissions %>
+            <small>
+              <% if student.invitation %>
+                <% if student.invitation.active? %>
+                  <span title="Σύνδεσμος για αυτόνομη υποβολή αρχείων από τον/την μαθητή/μαθήτρια">
+                    <%= link_to "Σύνδεσμος για #{student.person.mathiti}", invited_url(student.invitation.link), target: "_blank" %>
+                  </span>
+                <% else %>
+                  <%= "Σύνδεσμος #{student.person.mathiti} ανενεργός" %>
+                <% end %>
+              <% end %>
+            </small>
+          <% end %>
+        </div>
+        <div class="col"><!-- column 3 -->
+          <% if @site_setting.allow_autonomous_submissions %>
+            <small>
+              <% if student.invitation %>
+                <% if student.invitation.active? %>
+                  <%= button_to "απενεργοποίηση", deactivate_invitation_link_student_path(student), 
+                    class: "btn btn-outline-success" %>
+                  <%# button_to "αντιγραφή", "#", class: "btn btn-outline-success" %> <!-- TODO -->
+                  <% if student.person.contact_email and !student.person.contact_email.empty?%>
+                    <%# button_to "αποστολή στον μαθητή", submit_invitation_link_student_path(student), title: student.person.contact_email, class: "btn btn-outline-info" %>
+                    <% if student.person.sent_emails.by_date.first %>
+                      Τελ. αποστολή:
+                      <%= student.person.sent_emails.by_date.first.created_at.localtime %>
+                    <% end %>
+                  <% end %>
+                <% else %>
+                  <%= button_to "ενεργοποίηση συνδέσμου", activate_invitation_link_student_path(student), class: "btn btn-outline-dark" %>
+                <% end %>
+              <% end %>
+            </small>
+          <% end %>
+        </div>
+      <% end %>
+    </div>
+    <% if current_user %>
+      <div class="row">
+        <div class="col">
+          <%= turbo_frame_tag "student_#{student.id}_submissions" do %>
+            <% student.student_submissions.mandatory.ordered.each do |student_submission| %>
+              <%= render student_submission %>
+            <% end %>
+            <% student.student_submissions.optional.ordered.each do |student_submission| %>
+              <%= render student_submission %>
+            <% end %>
+          <% end %>
+        </div>
+      </div>
+    <% end %>
+  </div>
+<% end %>

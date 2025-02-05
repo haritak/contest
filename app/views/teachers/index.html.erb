@@ -1,0 +1,20 @@
+<div id="teachers" class="container my-3">
+  <%= turbo_frame_tag "teachers_header" do %>
+    <%= render partial: "teachers/teachers_header", locals: {teachers: @teachers} %>
+  <% end %>
+
+  <!-- Υπεύθυνοι εκπαιδευτικοί που έχουν <strong>οριστικοποιηθεί</strong> -->
+  <%= turbo_frame_tag "team_teacher_members" do %>
+    <% @teachers.each do |teacher| %>
+      <%= render teacher %>
+    <% end %>
+  <% end %>
+
+  <div class="container d-flex justify-content-center my-2">
+    <div class="row d-flex justify-content-center">
+      <div class="d-flex justify-content-center mb-3">
+        <%= link_to "Πίσω", :back, class: "btn btn-outline-success" %>
+      </div>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,182 @@
+# Files in the config/locales directory are used for internationalization and
+# are automatically loaded by Rails. If you want to use locales other than
+# English, add the necessary files in this directory.
+#
+# To use the locales, use `I18n.t`:
+#
+#     I18n.t "hello"
+#
+# In views, this is aliased to just `t`:
+#
+#     <%= t("hello") %>
+#
+# To use a different locale, set it with `I18n.locale`:
+#
+#     I18n.locale = :es
+#
+# This would use the information in config/locales/es.yml.
+#
+# To learn more about the API, please read the Rails Internationalization guide
+# at https://guides.rubyonrails.org/i18n.html.
+#
+# Be aware that YAML interprets the following case-insensitive strings as
+# booleans: `true`, `false`, `on`, `off`, `yes`, `no`. Therefore, these strings
+# must be quoted to be interpreted as strings. For example:
+#
+#     en:
+#       "yes": yup
+#       enabled: "ON"
+
+el:
+  hello: "Hello world"
+  submit: "Υποβολή"
+  person: &person "Προσωπικά στοιχεία"
+  team: &team "Στοιχεία Σχολείου"
+  activerecord:
+    models:
+      team:
+       one: "ομάδα"
+       other: "ομάδες"
+      user: "χρήστη"
+      submission: "υποβολή"
+      school_class: &school_class "τάξη"
+      school: &school "Σχολείο"
+      person: *person
+      team_role: "Ρόλος στην ομάδα"
+    attributes:
+      person:
+        last_name: "Επώνυμο"
+        first_name: "Όνομα"
+        father_name: "Όνομα πατέρα"
+        mother_name: "Όνομα μητέρας"
+        gender: "Φύλο"
+        contact_phone: &phone "Τηλέφωνο επικοινωνίας"
+        contact_email: &email "Email επικοινωνίας"
+      teacher:
+        team_role: "Ρόλος στην ομάδα"
+        person: "Προσωπικά στοιχεία"
+        speciality: "Κλάδος/ειδικότητα"
+        gdpr_accepted: "Πολιτική προσωπικών δεδομένων"
+      team: 
+        nickname: "παρατσούκλι"
+        school: *school
+        contact_phone: "Τηλ. Σχ. Μονάδας"
+        contact_email: "Email Σχ. Μονάδας"
+      user:
+        password: "κωδικός"
+        password_confirmation: "επιβεβαίωση κωδικού"
+        email: "email"
+      submission:
+        submission_type: "περιεχομένο αρχείου"
+        submission_file: "αρχείο προς υποβολή"
+      student_submission:
+        student_submission_type: "κατηγορία αρχείου"
+        file: "Αρχείο προς υποβολή"
+        title: "Τίτλος/Σημειώσεις"
+        notes: "Σημειώσεις"
+      student:
+        school_class: *school_class
+        is_adult: "Ενήλικος/η"
+        guardian: "Ονο/μο Κηδεμόνα"
+      school_class: 
+        school_class: *school_class
+
+    errors:
+      models:
+        person:
+          attributes:
+            first_name:
+              blank: &name_blank "δεν μπορεί να είναι κενό"
+            last_name:
+              blank: *name_blank
+            father_name:
+              blank: *name_blank
+            contact_phone: &contact_phone_errors
+              invalid: "επιτρέπονται μόνο νούμερα"
+              too_short: "χρειάζονται 10 νούμερα ακριβώς (είναι λιγότερα)"
+              too_long: "χρειάζονται 10 νούμερα ακριβώς (είναι περισσότερα)"
+              wrong_length: "χρειάζονται 10 νούμερα ακριβώς"
+            contact_email: &contact_email_errors
+              invalid: "επιτρέπεται email διεύθυνση: π.χ. example@example.com"
+            gender: 
+              blank: *name_blank
+        student:
+          attributes:
+            school_class:
+              required: "απαιτείται"
+        team:
+          attributes:
+            nickname:
+              taken: "δυστυχώς το έχει προλάβει άλλη ομάδα!"
+              blank: "δεν μπορεί να είναι κενό !!!"
+            contact_phone:
+              <<: *contact_phone_errors
+            contact_email:
+              <<: *contact_email_errors
+            school:
+              required: "απαιτείται να επιλέξετε"
+              taken: "Υπάρχει ήδη λογαριασμός για αυτό το σχολείο!"
+        teacher:
+          attributes:
+            gdpr_accepted:
+              accepted: "Είναι υποχρεωτική η αποδοχή της πολιτικής"
+            speciality:
+              required: "Απαιτείται ο κλάδος/ειδικότητα"
+        submission:
+          attributes:
+            submission_file:
+              blank: "δεν ορίσατε κάποιο αρχείο"
+            submission_type:
+              required: "απαιτείται να δηλωθεί το είδος/η κατηγορία του αρχείου"
+        student_submission:
+          attributes:
+            file:
+              blank: "δεν ορίσατε κάποιο αρχείο"
+            student_submission_type:
+              required: "απαιτείται να δηλωθεί το είδος/η κατηγορία του αρχείου"
+            title: 
+              blank: "δεν ορίσατε κάποιο τίτλο"
+
+        user:
+          attributes:
+            email:
+              blank: "δεν μπορεί να είναι κενο"
+              taken: "υπάρχει ήδη λογαριασμός με αυτό το email"
+            password:
+              blank: "δεν μπορεί να είναι κενός"
+              too_short: "πολύ μικρός"
+            password_confirmation:
+              confirmation: "δεν ταιριάζει η επιβεβαιώση"
+
+  errors:
+    format: "%{attribute}: %{message}"
+    messages:
+      content_type_invalid: "δεν είναι σωστού τύπου"
+      file_size_not_less_than: "το αρχείο σας δεν θα πρέπει να υπερβαίνει τα %{max_size} (αυτό που δοκιμάσατε να ανεβάσετε είναι %{file_size})"
+      file_size_not_less_than_or_equal_to: "file size must be less than or equal to %{max_size} (current size is %{file_size})"
+      file_size_not_greater_than: "το αρχείο σας θα πρέπει να είναι τουλάχιστον %{min_size} (αυτό που δοκιμάσατε να ανεβάσετε είναι %{file_size})"
+      file_size_not_greater_than_or_equal_to: "file size must be greater than or equal to %{min_size} (current size is %{file_size})"
+      file_size_not_between: "file size must be between %{min_size} and %{max_size} (current size is %{file_size})"
+      total_file_size_not_less_than: "total file size must be less than %{max_size} (current size is %{total_file_size})"
+      total_file_size_not_less_than_or_equal_to: "total file size must be less than or equal to %{max_size} (current size is %{total_file_size})"
+      total_file_size_not_greater_than: "total file size must be greater than %{min_size} (current size is %{total_file_size})"
+      total_file_size_not_greater_than_or_equal_to: "total file size must be greater than or equal to %{min_size} (current size is %{total_file_size})"
+      total_file_size_not_between: "total file size must be between %{min_size} and %{max_size} (current size is %{total_file_size})"
+      limit_out_of_range: "total number is out of range"
+      image_metadata_missing: "is not a valid image"
+      dimension_min_inclusion: "must be greater than or equal to %{width} x %{height} pixel"
+      dimension_max_inclusion: "must be less than or equal to %{width} x %{height} pixel"
+      dimension_width_inclusion: "width is not included between %{min} and %{max} pixel"
+      dimension_height_inclusion: "height is not included between %{min} and %{max} pixel"
+      dimension_width_greater_than_or_equal_to: "το πλάτος θα πρέπει να είναι μεγαλύτερο ή ίσο με %{length} pixel"
+      dimension_height_greater_than_or_equal_to: "το ύψος θα πρέπει να είναι μεγαλύτερο ή ίσο με %{length} pixel"
+      dimension_width_less_than_or_equal_to: "το πλάτος πρέπει να είναι λιγότερη ή ίσο με %{length} pixel"
+      dimension_height_less_than_or_equal_to: "το ύψος πρέπει να είναι λιγότερο ή ίσο με %{length} pixel"
+      dimension_width_equal_to: "width must be equal to %{length} pixel"
+      dimension_height_equal_to: "height must be equal to %{length} pixel"
+      aspect_ratio_not_square: "must be a square image"
+      aspect_ratio_not_portrait: "must be a portrait image"
+      aspect_ratio_not_landscape: "must be a landscape image"
+      aspect_ratio_is_not: "must have an aspect ratio of %{aspect_ratio}"
+      aspect_ratio_unknown: "has an unknown aspect ratio"
+      image_not_processable: "υπάρχει πρόβλημα με το αρχείο εικόνας"

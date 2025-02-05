@@ -1,0 +1,13 @@
+<p style="color: green"><%= notice %></p>
+
+<h1>Student submission types</h1>
+
+<div id="student_submission_types">
+  <table class="table">
+    <% @student_submission_types.each do |student_submission_type| %>
+      <%= render student_submission_type %>
+    <% end %>
+  </table>
+</div>
+
+<%= link_to "New student submission type", new_student_submission_type_path %>

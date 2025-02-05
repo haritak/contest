@@ -1,0 +1,45 @@
+<p style="color: green"><%= notice %></p>
+
+<h1>Λογαριασμοί Πλατφόρμας (<%= @users.count %>)</h1>
+
+<p>Οι παρακάτω λογαριασμοί έχουν δημιουργηθεί στην πλατφόρμα</p>
+
+<div id="users">
+  <table class="table">
+    <tr>
+      <th>uid</th>
+      <th>is_something</th>
+      <th>email δημιουργίας λογαριασμού</th>
+      <th>Συσχετισμένο σχολείο</th>
+      <th>confirmation</th>
+      <th>current_sign_in_at</th>
+      <th>current_sign_in_ip</th>
+      <th>failed_attempts</th>
+      <th>sign_in_count</th>
+      <th>last_sign_in_at</th>
+      <th>last_sign_in_ip</th>
+      <th>actions</th>
+    </tr>
+
+    <% @users.each do |user| %>
+      <tr>
+        <%= render user %>
+        <td>
+          <% if not user.confirmed? %>
+            <span title="Immediate confirmation - no need to confirm through email">
+              <%= button_to "Manual Επιβ.", manualy_confirm_user_path(user), type: "button", class: "btn btn-link" %>
+            </span>
+          <% end %>
+          <span title="Immediate sign in as this user">
+            <%= button_to "Μεταμόρφωση", become_user_path(user), type: "button", class: "btn btn-link" %>
+          </span>
+
+          <span title="Immediate delete of the user. Το πιο πιθανό θα κρασάρει. Πρέπει να έχουν αφαιρεθεί όλα τα δεδομένα για να πετύχει.">
+            <%= button_to "Διαγραφή", user, method: :delete, type: "button", class: "btn btn-link link-danger", 
+              form: {data: { turbo_confirm: 'Να προχωρήσω στην διαγραφή;', turbo_frame: "_top" }} %>
+          </span>
+        </td>
+      </tr>
+    <% end %>
+  </table>
+</div>

@@ -1,0 +1,25 @@
+<h1>Αρχεία Μαθητών (<%= @student_submissions.count %>)</h1>
+
+<h2>Οριστικοποιημένα (<%= @student_submissions.finalized.count %>)</h2>
+
+<table class="table">
+  <div id="student_submissions">
+    <% @student_submissions.finalized.each do |student_submission| %>
+      <tr>
+        <%= render partial: 'student_submissions/line_student_submission', locals:{ student_submission: student_submission } %>
+      </tr>
+    <% end %>
+  </div>
+</table>
+
+<h2>Μη Οριστικοποιημένα (<%= @student_submissions.not_finalized.count %>)</h2>
+
+<table class="table">
+  <div id="student_submissions">
+    <% @student_submissions.not_finalized.each do |student_submission| %>
+      <tr>
+        <%= render partial: 'student_submissions/line_student_submission', locals:{ student_submission: student_submission } %>
+      </tr>
+    <% end %>
+  </div>
+</table>

@@ -1,0 +1,41 @@
+# == Schema Information
+#
+# Table name: student_submissions
+#
+#  id                         :bigint           not null, primary key
+#  finalized                  :boolean          default(FALSE)
+#  finalized_date             :datetime
+#  notes                      :text(65535)
+#  review_datetime            :datetime
+#  review_marked_ok           :boolean          default(FALSE)
+#  review_notes               :text(65535)
+#  review_public              :boolean
+#  title                      :string(255)
+#  created_at                 :datetime         not null
+#  updated_at                 :datetime         not null
+#  review_user_id             :bigint
+#  student_id                 :bigint           not null
+#  student_submission_type_id :bigint           not null
+#  user_id                    :bigint           not null
+#
+# Indexes
+#
+#  fk_rails_8da25c4bd6                                      (review_user_id)
+#  index_student_submissions_on_student_id                  (student_id)
+#  index_student_submissions_on_student_submission_type_id  (student_submission_type_id)
+#  index_student_submissions_on_user_id                     (user_id)
+#
+# Foreign Keys
+#
+#  fk_rails_...  (review_user_id => users.id)
+#  fk_rails_...  (student_id => students.id)
+#  fk_rails_...  (student_submission_type_id => student_submission_types.id)
+#  fk_rails_...  (user_id => users.id)
+#
+require "test_helper"
+
+class StudentSubmissionTest < ActiveSupport::TestCase
+  # test "the truth" do
+  #   assert true
+  # end
+end

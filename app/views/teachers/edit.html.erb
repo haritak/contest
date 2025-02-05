@@ -1,0 +1,19 @@
+<h1>Ενημέρωση στοιχείων</h1>
+
+<% if current_user.is_admin? %>
+
+  <p>
+  Ο/η εκπαιδευτικός είναι για του χρήστη: <%= @teacher.person.user.email %>
+  </p>
+
+  <%= render "form", teacher: @teacher %>
+
+<% else %>
+
+  <%= turbo_frame_tag @teacher do %>
+  <div class="container mb-4 bg-body-secondary border border-secondary rounded">
+    <%= render "form", teacher: @teacher %>
+  </div>
+  <% end %>
+
+<% end %>

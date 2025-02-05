@@ -1,0 +1,10 @@
+<p style="color: green"><%= notice %></p>
+
+<%= render @invited_submission %>
+
+<div>
+  <%= link_to "Edit this invited submission", edit_invited_submission_path(@invited_submission) %> |
+  <%= link_to "Back to invited submissions", invited_submissions_path %>
+
+  <%= button_to "Destroy this invited submission", @invited_submission, method: :delete %>
+</div>

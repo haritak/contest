@@ -1,0 +1,50 @@
+<%= turbo_frame_tag invitation.student do %>
+  <%= form_with(model: invitation) do |form| %>
+    <% if invitation.errors.any? %>
+      <div style="color: red">
+        <h2><%= pluralize(invitation.errors.count, "error") %> prohibited this invitation from being saved:</h2>
+
+        <ul>
+          <% invitation.errors.each do |error| %>
+            <li><%= error.full_message %></li>
+          <% end %>
+        </ul>
+      </div>
+    <% end %>
+
+    <% if current_user.is_admin? %>
+      <div>
+        <%= form.label :user_id, style: "display: block" %>
+        <%= form.hidden_field :user_id, value: invitation.user.id %>
+        <%= render invitation.user %>
+      </div>
+    <% end %>
+
+    Δημιουργία συνδέσμου υποβολής αρχείων για τον/την 
+    <div>
+      <%= render invitation.student.person %>
+      <%= form.hidden_field :student_id, value: invitation.student.id %>
+    </div>
+
+    <div>
+      <%= form.hidden_field :link, value: invitation.link %>
+      <!-- <h2><%= link_to "Σύνδεσμος",  "#{invited_url(invitation.link)}" %></h2> -->
+    </div>
+
+    <div>
+      <%= form.label "Ενεργός" %> <%= form.check_box :active %>
+    </div>
+
+    <div>
+    <!--
+      <%= form.label :submission_type_id %>
+      <%= form.collection_select :submission_type_id, SubmissionType.all, :id, :submission_type,
+        { include_blank: true } %> (αν μείνει κενό, εννοούνται όλα τα optional)
+    -->
+    </div>
+
+    <div>
+      <%= form.submit  "Ενημέρωση" %>
+    </div>
+  <% end %>
+<% end %>

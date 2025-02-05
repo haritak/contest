@@ -1,0 +1,22 @@
+<%= form_with(model: school_type) do |form| %>
+  <% if school_type.errors.any? %>
+    <div style="color: red">
+      <h2><%= pluralize(school_type.errors.count, "error") %> prohibited this school_type from being saved:</h2>
+
+      <ul>
+        <% school_type.errors.each do |error| %>
+          <li><%= error.full_message %></li>
+        <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+  <div>
+    <%= form.label :school_type, style: "display: block" %>
+    <%= form.text_field :school_type %>
+  </div>
+
+  <div>
+    <%= form.submit t(:submit) %>
+  </div>
+<% end %>

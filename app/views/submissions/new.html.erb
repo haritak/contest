@@ -1,0 +1,12 @@
+<%= turbo_frame_tag "user_submissions_header" do %>
+  <div class="container mb-4 bg-body-secondary border border-secondary rounded">
+
+    <%= render partial: "submissions/static_submissions_header" %>
+
+    <h3>Προσθήκη αρχείου Σχολικής Μονάδας</h3>
+
+    <%= render "form", submission: @submission %>
+
+  </div>
+
+<% end %>

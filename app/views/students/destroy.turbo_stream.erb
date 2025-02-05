@@ -1,0 +1,5 @@
+<%= turbo_stream.remove @student %>
+
+<%= turbo_stream.update "students_header", partial: "students_header", 
+  locals: {students: current_user.students} %>
+

@@ -1,0 +1,133 @@
+<div class="container my-2">
+  <div class="row text-center m-1">
+    <%= turbo_frame_tag "preview_of_#{@student_submission.id}" do %>
+      <%= @student_submission.id %><br/>
+      <% if @student_submission.file.representable? %>
+        <%= link_to student_files_show_student_submission_path(@student_submission), target: "_blank" do %>
+          <%= image_tag @student_submission.file.representation(resize_to_limit: [1300, 800]) %>
+        <% end %>
+      <% end %>
+    <% end %>
+  </div>
+
+  <% student_submission = @student_submission %>
+
+  <div class="row d-flex justify-content-center">
+    <div class="d-flex justify-content-center">
+      <h2><%= student_submission.title %></h2>
+    </div>
+  </div>
+
+  <% if current_user == student_submission.user %>
+    <div class="row d-flex justify-content-center">
+      <div class="d-flex justify-content-center">
+        <h4>
+          <%= student_submission.student.person.short_name %>
+          (τάξη: <%= student_submission.student.school_class.school_class %>)
+        </h4>
+      </div>
+    </div>
+  <% end %>
+
+  <% if current_user.is_admin? %>
+    <div class="row d-flex justify-content-center">
+      <div class="d-flex justify-content-center">
+        <% if student_submission.finalized? %>
+          <span class="badge text-bg-success">οριστικοποιημένη</span>
+        <% else %>
+          <span class="badge text-bg-warning">μη οριστικοποιημένη</span>
+        <% end %>
+      </div>
+    </div>
+
+    <div class="row d-flex justify-content-center">
+      <div class="d-flex justify-content-center mb-1">
+        <% if student_submission.team.participation_finalized? %> 
+          <span title="Το σχολείο έχει κάνει υποβολή συμμετοχής στον διαγωνισμό">✓</span>
+        <% else %>
+          <span title="Το σχολείο ΔΕΝ έχει κάνει υποβολή συμμετοχής στον διαγωνισμό!">🚫</span>
+        <% end %>
+      </div>
+    </div>
+  <% end %>
+
+  <div class="row text-center">
+    <% if student_submission.file.analyzed? %>
+      <% max_dimension_pixels = [student_submission.file.metadata['width'], student_submission.file.metadata['height']].max %>
+      <% if max_dimension_pixels < 3000 %>
+        <span class="badge text-bg-danger text-wrap" title="Η μεγαλύτερη πλευρά να μην είναι μικρότερη από 3000 pixel">
+          <%= "#{student_submission.file.metadata['width']}x#{student_submission.file.metadata['height']}" %>
+        </span>
+      <% else %>
+        <span>διαστάσεις ΟΚ</span>
+      <% end %>
+      <% if student_submission.file.byte_size < 2.megabytes %>
+        <span class="badge text-bg-danger text-wrap" title="Το αρχείο είναι μικρότερο του επιτρεπτου. Το αρχείο θα πρέπει να είναι τουλάχιστον 2MB">
+          <%= "#{student_submission.file.byte_size/1.kilobyte} KB" %>
+        </span>
+      <% else %>
+        <span>μέγεθος ΟΚ</span>
+      <% end %>
+      <br/>
+    <% else %>
+      <span>file not analyzed</span>
+    <% end %>
+
+    <% if current_user.is_admin? or current_user.is_secretary? %>
+      <% if current_user.is_admin? %>
+        <%= link_to student_path(student_submission.student) do %>
+          <%= student_submission.student.is_adult? ? "Μ" : "μ"%><%= student_submission.student_id %>
+        <% end %>
+      <% elsif current_user.is_secretary? %>
+        <span><%= student_submission.student.person.short_name %></span>
+      <% end %>
+      <br/>
+      <% if current_user.is_admin? %>
+        <%= link_to "Σ#{student_submission.user.id}", team_path(student_submission.team) %>
+      <% elsif current_user.is_secretary? %>
+        <span><%= student_submission.user.team.school.name %></span>
+      <% end %>
+      <br/>
+
+      <span>
+        <strong><%= student_submission.student.student_submissions.optional.count %></strong> 
+        συνολικά φωτογραφίες/α από <%= student_submission.student.person.ton_mathiti %>.
+      </span>
+
+      <br/>
+
+      <span>
+        <strong><%= student_submission.user.student_submissions.optional.count %></strong>
+        συνολικά φωτογραφίες/α από το ίδιο σχολείο.
+      </span>
+
+      <br/>
+
+      <span>
+        Ετικέτες:
+        <%= student_submission.tags.map{ |t| t.name }.join(" ") %>
+        <%= "(καμία)" if student_submission.tags.count == 0 %>
+      </span>
+      <span>
+        <hr/>
+        Άλλες φωτογραφίες <%= student_submission.person.tou_mathiti %> που έχουν ετικέτα:<br/>
+        <% if student_submission.tags.count != 0 %>
+          <% student = student_submission.student %>
+          <% none_found = true %>
+          <% student.student_submissions.each do |other_ss| %>
+            <% next if other_ss == student_submission %>
+            <% if other_ss.tags.count > 0 %>
+              <% none_found  = false %>
+                <%= link_to other_ss.title, student_files_preview_student_submission_path(other_ss) %>:
+                <%= other_ss.tags.map{ |t| t.name }.join(" ") %>
+            <% end %>
+          <% end %>
+          <%= "(δεν υπάρχουν άλλες φωτογραφίες #{student.person.tou_mathiti} που να έχουν ετικέτες)" if none_found %>
+      </span>
+      <% end %>
+
+      <br/>
+
+    <% end %>
+  </div>
+</div>

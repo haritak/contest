@@ -1,0 +1,30 @@
+# == Schema Information
+#
+# Table name: invited_submissions
+#
+#  id                    :bigint           not null, primary key
+#  created_at            :datetime         not null
+#  updated_at            :datetime         not null
+#  invitation_id         :bigint           not null
+#  student_submission_id :bigint
+#  submission_id         :bigint
+#
+# Indexes
+#
+#  index_invited_submissions_on_invitation_id          (invitation_id)
+#  index_invited_submissions_on_student_submission_id  (student_submission_id)
+#  index_invited_submissions_on_submission_id          (submission_id)
+#
+# Foreign Keys
+#
+#  fk_rails_...  (invitation_id => invitations.id)
+#  fk_rails_...  (student_submission_id => student_submissions.id)
+#  fk_rails_...  (submission_id => submissions.id)
+#
+require "test_helper"
+
+class InvitedSubmissionTest < ActiveSupport::TestCase
+  # test "the truth" do
+  #   assert true
+  # end
+end

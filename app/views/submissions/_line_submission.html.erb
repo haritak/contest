@@ -1,0 +1,21 @@
+
+<td><%= submission.user.team.school.name %></td>
+<td><%= submission.submission_type.submission_type %></td>
+<td><%= submission.finalized? ? "οριστικό" : "" %></td>
+<td>
+  <%= submission.submission_file.filename %>
+  <% if submission.submission_file.attached? %>
+    <%= link_to submission.submission_file, data: {turbo: false}, target: "_blank" do %> 
+      <% if submission.submission_file.representable? %>
+        <%= image_tag submission.submission_file.representation(resize_to_limit: [50,50]) %>
+      <% else %>
+        κατέβασμα
+      <% end %>
+    <% end %>
+  <% else %>
+      ERROR File missing!
+  <% end %>
+</td>
+<td>
+  <%= submission.submission_description %>
+</td>

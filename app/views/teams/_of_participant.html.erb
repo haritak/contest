@@ -1,0 +1,6 @@
+<div id="teams">
+  <%= turbo_frame_tag "team_header" do %>
+    <%= render "teams/team_header", teams: @teams %>
+    <%= render @teams %>
+  <% end %>
+</div>

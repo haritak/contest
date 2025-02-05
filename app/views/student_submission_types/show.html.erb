@@ -1,0 +1,10 @@
+<p style="color: green"><%= notice %></p>
+
+<%= render @student_submission_type %>
+
+<div>
+  <%= link_to "Edit this student submission type", edit_student_submission_type_path(@student_submission_type) %> |
+  <%= link_to "Back to student submission types", student_submission_types_path %>
+
+  <%= button_to "Destroy this student submission type", @student_submission_type, method: :delete %>
+</div>

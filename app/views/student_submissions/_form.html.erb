@@ -1,0 +1,58 @@
+<%# locals: (student_submission:) -%>
+
+<%= form_with(model: student_submission) do |form| %>
+  <% if student_submission.errors.any? %>
+    <div class="alert alert-danger my-1" role="alert">
+      <ul>
+        <% student_submission.errors.each do |error| %>
+          <li><%= error.full_message %></li>
+        <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+  <%= form.hidden_field :student_id, value: @student.id %>
+
+  <div class="container my-1">
+    <div class="row">
+      <div class="col">
+        <strong>Περιεχόμενο αρχείου<br/></strong>
+        <%= form.collection_select :student_submission_type_id, StudentSubmissionType.all, 
+          :id, :name, {include_blank: true} %> 
+      </div>
+
+      <div class="col">
+        <% if student_submission.file.attached? and student_submission.file.persisted? %>
+          Τρέχων αρχείο: 
+          <%= link_to student_submission.file.filename, student_submission.file %>
+          <br/>
+        <% else %>
+            <strong><%= form.label :file, style: "display: block" %></strong>
+            <%= form.file_field :file %> <!-- , accept: 'application/pdf'  -->
+        <% end %>
+      </div>
+
+
+      <div class="col">
+        <span title="Ο τίτλος είναι υποχρεωτικός μόνο στην περίπτωση αρχείου φωτογραφίας">
+          <%= form.label :title, style: "display: block" %> 
+          <%= form.text_field :title %>
+        </span>
+      </div>
+      <!-- TODO: notes field is ignored, title is being used as notes field for non images -->
+
+      <div class="row">
+        <div class="col-3">
+          <div class=row><div class=col>
+              <%= form.submit "Υποβολή", class: "btn btn-sm btn-outline-primary" %>
+              <% if student_submission.persisted? %>
+                <%= link_to "Άκυρο", student_submission, class: "btn btn-sm btn-outline-danger" %>
+              <% else %>
+                <%= link_to "Άκυρο", my_submissions_student_path(@student), class: "btn btn-sm btn-outline-danger" %>
+              <% end %>
+            </div></div>
+        </div>
+      </div>
+    </div>
+  </div>
+<% end %>

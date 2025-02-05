@@ -1,0 +1,26 @@
+# == Schema Information
+#
+# Table name: site_settings
+#
+#  id                                       :bigint           not null, primary key
+#  allow_autonomous_submissions             :boolean          default(FALSE)
+#  date_to_deactivate_seminar_participation :datetime
+#  enable_coadmin                           :boolean          default(FALSE)
+#  hide_students                            :boolean          default(FALSE)
+#  shut_down_previews                       :boolean          default(FALSE)
+#  site_name                                :string(255)      not null
+#  site_title                               :string(255)      not null
+#  created_at                               :datetime         not null
+#  updated_at                               :datetime         not null
+#
+# Indexes
+#
+#  index_site_settings_on_site_name  (site_name) UNIQUE
+#
+require "test_helper"
+
+class SiteSettingTest < ActiveSupport::TestCase
+  # test "the truth" do
+  #   assert true
+  # end
+end

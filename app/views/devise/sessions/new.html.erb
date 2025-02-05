@@ -1,0 +1,34 @@
+<div class="container">
+  <div class="row justify-content-md-center">
+    <div class="col col-lg-2">
+      <h2>Σύνδεση</h2>
+    </div>
+    <div class="col-md-auto">
+      <%= form_for(resource, as: resource_name, url: session_path(resource_name), html: {data: {turbo: false}} ) do |f| %>
+        <div class="field">
+          <%= f.label :email %><br />
+          <%= f.email_field :email, autofocus: true, autocomplete: "email" %>
+        </div>
+
+        <div class="field">
+          <%= f.label :password %><br />
+          <%= f.password_field :password, autocomplete: "current-password" %>
+        </div>
+
+        <% if devise_mapping.rememberable? %>
+          <div class="field">
+            <%= f.check_box :remember_me %>
+            <%= f.label "Να παραμείνω συνδεμένος" %>
+          </div>
+        <% end %>
+
+        <div class="actions">
+          <%= f.submit "Σύνδεση"%>
+        </div>
+      <% end %>
+    </div>
+    <div class="col col-lg-2">
+      <%= render "devise/shared/links" %>
+    </div>
+  </div>
+</div>

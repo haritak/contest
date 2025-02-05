@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>ΠΔΕ Κρήτης - Διαχείριση Διαγωνισμών</title>
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <%= csrf_meta_tags %>
+    <%= csp_meta_tag %>
+
+    <%= stylesheet_link_tag "application", "data-turbo-track": "reload" %>
+    <%= javascript_importmap_tags %>
+
+    <!-- https://github.com/igorkasyanchuk/new_google_recaptcha -->
+    <%= yield :recaptcha_js %>
+  </head>
+
+  <body>
+    <!-- added based on devise -->
+    <% if notice and notice.strip != "" %>
+      <div class="alert alert-success" role="alert">
+        <p class="notice"><%= notice %></p>
+      </div>
+    <% end %>
+    <% if alert and alert.strip != "" %>
+      <div class="alert alert-danger" role="alert">
+        <p class="alert"><%= alert %></p>
+      </div>
+    <% end %>
+
+    <nav class="navbar navbar-expand-lg bg-body-tertiary">
+      <div class="container-fluid">
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+          <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarSupportedContent">
+          <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+
+            <li class="nav-item">
+              <%= link_to 'Αρχική', root_path, class: 'nav-link active' %>
+            </li>
+            <li class="nav-item">
+              <%= link_to 'ΠΔΕ Κρήτης', "https://pdekritis.gr", class: 'nav-link active' %>
+            </li>
+            <li class="nav-item">
+              <%= link_to 'Κεντρική Σελίδα Διαγωνισμού', "https://3rd-photocontest.pdekritis.gr", class: 'nav-link active' %>
+            </li>
+          </ul> <!--navbar -->
+        </div> <!-- collapse navbar-collapse -->
+      </div> <!-- div container fluid --->
+    </nav> <!-- nav class navbar -->
+    <%= yield %>
+    <% if Rails.env.development? %>
+      <div class="container">
+        <div class="d-flex justify-content-center">
+          <div class="alert alert-danger" role="alert">
+            <p class="alert">ο εξυπηρετητής λειτουργεί σε κατάσταση ανάπτυξης, παρακαλώ ελάτε αργότερα!</p>
+          </div>
+        </div>
+      </div>
+    <% end %>
+  </body>
+</html>

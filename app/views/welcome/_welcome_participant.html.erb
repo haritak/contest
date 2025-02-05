@@ -1,0 +1,170 @@
+  <div class="container my-2">
+    <div class="row">
+      <div class="col">
+        <h1> Καλώς ήλθατε!</h1>
+        <!-- 
+          Μην ξεχάσετε να πατήσετε "Υποβολή Συμμετοχής" στο τέλος της σελίδας.  Αναλυτικές λεπτομέρειες και οδηγίες θα βρείτε 
+          <%# link_to "εδώ.", "https://3rd-photocontest.pdekritis.gr", target: "_blank" %>
+        -->
+      </div>
+    </div>
+  </div>
+
+<div class="team_data container">
+  <%= render "teams/of_participant" %>
+</div>
+
+<% if current_user&.team&.participation_finalized? %>
+  <div class="container">
+    <div class="row text-center">
+      <h1>Η συμμετοχή σας έχει υποβληθεί</h1>
+      <h2>καλή σας επιτυχία!</h2>
+    </div>
+  </div>
+<% else %>
+  <div class="teachers container">
+    <%= render "teachers/of_participant" %>
+  </div>
+
+  <div class="submitted_files container">
+      <%= render "submissions/of_participant" %>
+  </div>
+
+  <div class="container my-2">
+    <div class="row">
+      <div class="col">
+            <!--
+        <h2>Σεμινάριο Φωτογραφίας
+          <span title="κλικ για βοήθεια">
+            <a class="btn btn-sm btn-outline-primary" 
+               data-bs-toggle="collapse" 
+               href="#seminar_help" role="button" aria-expanded="false" 
+                                                  aria-controls="seminar_help">
+              βοήθεια
+            </a>
+          </span>
+        </h2>
+            -->
+        <% if not current_user.team&.seminar_participation_finalized? %>
+          <div class="collapse" id="seminar_help">
+            <ul>
+              <li>
+                Η συμμετοχή είναι προαιρετική.
+              </li>
+              <li>
+                Για την υποβολή συμμετοχής στο σεμινάριο, 
+                πρέπει να πατήσετε στο "Υποβολή Συμμετοχής Σχολικής Μονάδας στο Σεμινάριο Φωτογραφίας".
+              </li>
+            </ul>
+          </div>
+          <% if not @site_setting.date_to_deactivate_seminar_participation or DateTime.current <= @site_setting.date_to_deactivate_seminar_participation %> 
+            <div class="row">
+              <div class="d-flex justify-content-center ">
+                <%= button_to "Υποβολή Συμμετοχής Σχολικής Μονάδας στο Σεμινάριο Φωτογραφίας", 
+                  make_participation_to_seminar_final_user_path(current_user),
+                  class: "btn btn-outline-secondary",
+                  form: {data: { turbo_confirm: 'Να προχωρήσω στην οριστική υποβολή της συμμετοχής για το σεμινάριο;'}, class: "button_to my-2"} %>
+              </div>
+              <div class="row">
+                <div class="d-flex justify-content-center align-items-center">
+                  <span title="Δόθηκε μικρή παράταση">
+                    <p>(προθεσμία υποβολής μέχρι <s>12</s>13 Δεκεμβρίου 2024)</p>
+                  </span>
+                </div>
+              </div>
+            </div>
+          <% else %>
+            <!-- έχει παρέλθει η προθεσμία υποβολής για το σεμινάριο -->
+          <% end %>
+        <% else %>
+          <h2>Σεμινάριο Φωτογραφίας</h2>
+          <div class="collapse" id="seminar_help">
+            <ul>
+              <li>
+                Επιτυχής υποβολή συμμετοχής Σχολικής Μονάδας στο Σεμινάριο Φωτογραφίας.
+              </li>
+              <li>
+                Κατόπιν ολοκλήρωσης του ελέγχου, θα σας αποσταλεί σχετικό email με τις λεπτομέρειες
+                παρακολούθησης.
+              </li>
+            </ul>
+          </div>
+          <div class="text-center">
+            <a class="btn btn-sm btn-outline-primary" 
+               data-bs-toggle="collapse" 
+               href="#seminar_info" role="button" aria-expanded="false" 
+                                                  aria-controls="seminar_help">
+              Ευχαριστούμε πολύ για τη συμμετοχή σας στο Σεμινάριο!
+            </a>
+            <br/>
+          </div>
+          <div class="collapse" id="seminar_info">
+            <p>
+            Σας ευχαριστούμε πολύ για τη συμμετοχή σας στο σεμινάριο φωτογραφίας!
+            </p>
+            <p>
+            Υλικό από το σεμινάριο θα αποσταλεί σύντομα στους/στις συμμετέχοντες.
+            </p>
+          </div>
+        <% end %>
+      </div>
+    </div>
+  </div>
+
+
+  <% if not @site_setting.hide_students? %>
+    <div class="students container">
+      <%= render "students/of_participant" %>
+    </div>
+  <% end %>
+
+  <div class="container my-2">
+    <div class="row">
+      <div class="col">
+        <h2>Διαγωνισμός Φωτογραφίας
+          <span title="κλικ για βοήθεια">
+            <a class="btn btn-sm btn-outline-primary" 
+               data-bs-toggle="collapse" 
+               href="#contest_help" role="button" aria-expanded="false" 
+                                                  aria-controls="contest_help">
+              βοήθεια
+            </a>
+          </span>
+        </h2>
+        <div class="collapse" id="contest_help">
+          <ul>
+            <li>
+              Απαιτείται οριστικοποίηση της υποβολής πατώντας στο 
+              "Οριστική Υποβολή Συμμετοχής Σχολικής Μονάδας στο Διαγωνισμό Φωτογραφίας".
+            </li>
+            <li>
+              <strong>Μετά την οριστική υποβολή, δεν υπάρχει δυνατότητα προσθήκης μαθητών/μαθητριών, ούτε νέων αρχείων.</strong>
+            </li>
+            <li>
+              Η οριστική υποβολή πρέπει να έχει πραγματοποιηθεί το αργότερο μέχρι <strong><u>7 Μαρτίου 2025</u></strong>.
+            </li>
+          </ul>
+        </div>
+      </div>
+    </div>
+    <div class="row">
+      <div class="col">
+        <div class="col">
+          <div class="d-flex justify-content-center">
+            <%= button_to "Οριστική Υποβολή Συμμετοχής στον Φωτογραφικό Διαγωνισμό", 
+              make_participation_final_user_path(current_user),
+              class: "btn btn-outline-secondary position-relative",
+              form: {data: { turbo_confirm: 'Να προχωρήσω στην οριστική υποβολή της συμμετοχής στον διαγωνισμό;'}, class: "button_to my-2"} %>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="row">
+      <div class="d-flex justify-content-center align-items-center">
+        <p>(προθεσμία υποβολής μέχρι 7 Μαρτίου 2025)</p>
+      </div>
+    </div>
+  </div>
+
+<% end %>
+

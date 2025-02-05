@@ -1,0 +1,53 @@
+<%# locals: (selected_schools:, team:) -%>
+<%= form_with(model: team) do |form| %>
+  <div class="container mb-4 bg-body-secondary border border-secondary rounded">
+    <%= render partial: "teams/static_header" %>
+    <div class="row">
+      <div class"col">
+        <% if team.errors.any? %>
+          <div class="alert alert-danger" role="alert">
+            <ul>
+              <% team.errors.each do |error| %>
+                <li><%= error.full_message %></li>
+              <% end %>
+            </ul>
+          </div>
+        <% end %>
+      </div>
+    </div><!-- error row -->
+
+    <!--
+    <div class="row">
+      <div class="col">
+        <%= form.label :nickname, style: "display: block" %>
+        <%= form.text_field :nickname %>
+      </div>
+    </div>
+    -->
+
+    <div class="row">
+      <div class="col">
+        <%= form.label :school, style: "display: block" %>
+        <%= form.collection_select( :school_id, selected_schools, :id, :name, 
+                                   {include_blank: true, placeholder: 'Επιλογή σχολείου'},
+                                   id: "team_school_id", data: { controller: 'select' }
+        ) %>
+      </div>
+      <div class="col">
+        <%= form.label :contact_phone, style: "display: block" %>
+        <%= form.telephone_field :contact_phone %>
+      </div>
+      <div class="col">
+        <%= form.label :contact_email, style: "display: block" %>
+        <%= form.email_field :contact_email %>
+      </div>
+    </div><!-- row -->
+
+    <div class="row">
+      <div class="p-3 col">
+        <%= form.submit "Υποβολή", class: "btn btn-sm btn-outline-primary" %>
+        <%= link_to "Άκυρο", :back, class: "btn btn-sm btn-outline-danger" %>
+      </div>
+    </div>
+  </div> <!-- container -->
+<% end %>

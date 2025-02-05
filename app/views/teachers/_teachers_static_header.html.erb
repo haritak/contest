@@ -1,0 +1,31 @@
+<h2>Υπεύθυνοι/ες εκπαιδευτικοί
+  <span title="κλικ για βοήθεια">
+    <a class="btn btn-sm btn-outline-primary" data-bs-toggle="collapse" href="#collapse_teachers" role="button" aria-expanded="false" aria-controls="collapse_teachers">
+      βοήθεια
+    </a>
+  </span>
+</h2>
+  <div class="collapse" id="collapse_teachers">
+    <ul>
+      <li>
+        Απαιτείται η οριστικοποίηση των στοιχείων της σχολικής μονάδας πριν την προσθήκη εκπαιδευτικών.<br/>
+      </li>
+      <li>
+        Επίσης, απαιτείται η προσθήκη και οριστικοποίηση τουλάχιστον ενός/μιας εκπαιδευτικού ώστε να μπορεί
+        να ξεκινήσει η μεταφόρτωση αρχείων ή/και εγγραφή μαθητών/μαθητριών.
+      </li>
+    </ul>
+    <% if @site_setting.enable_coadmin? %>
+
+      <h4>Δυνατότητα Συνδιαχείρισης</h4>
+
+      <span class="btn btn-sm btn-outline-success">Συνδιαχείριση</span><br />
+
+      <p>
+      Ενεργοποιώντας την συνδιαχείριση για έναν/μια <strong>οριστικοποιημένο/η</strong> εκπαιδευτικό, του/της δίνει την δυνατότητα να συνδεθεί ως <%= current_user.email %> (λογαριασμός διαχειριστή),
+      αλλά χρησιμοποιώντας το δικό του/της email και κωδικό. Περισσότερες πληροφορίες <%= link_to "εδώ", "https://3rd-photocontest.pdekritis.gr/coadmin", target: "_blank" %>.
+      </p>
+
+    <% end %>
+  </div>
+

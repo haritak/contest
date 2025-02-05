@@ -1,0 +1,38 @@
+# == Schema Information
+#
+# Table name: teams
+#
+#  id                                   :bigint           not null, primary key
+#  contact_email                        :string(255)
+#  contact_phone                        :string(255)
+#  finalized                            :boolean          default(FALSE)
+#  finalized_date                       :datetime
+#  nickname                             :string(255)
+#  participation_finalized              :boolean          default(FALSE)
+#  participation_finalized_date         :datetime
+#  school_approval_secret               :string(255)
+#  school_approved                      :boolean          default(FALSE)
+#  seminar_participation_finalized      :boolean          default(FALSE)
+#  seminar_participation_finalized_date :datetime
+#  created_at                           :datetime         not null
+#  updated_at                           :datetime         not null
+#  school_id                            :bigint           not null
+#  user_id                              :bigint           not null
+#
+# Indexes
+#
+#  index_teams_on_school_id  (school_id)
+#  index_teams_on_user_id    (user_id)
+#
+# Foreign Keys
+#
+#  fk_rails_...  (school_id => schools.id)
+#  fk_rails_...  (user_id => users.id)
+#
+require "test_helper"
+
+class TeamTest < ActiveSupport::TestCase
+  # test "the truth" do
+  #   assert true
+  # end
+end

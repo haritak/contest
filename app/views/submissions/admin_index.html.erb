@@ -1,0 +1,122 @@
+<%= @submissions.count %> αρχεία.
+
+<table class="table table-striped">
+  <tr>
+    <th><span title="αριθμός λογαριασμού στην πλατφόρμα">uid</span></th>
+    <th>Σχολείο</th>
+    <% if not current_user.is_secretary? %>
+      <th>Emails</th>
+      <th>Τηλέφωνα</th>
+    <% end %>
+    <th>Τύπος Αρχείου</th>
+    <% if not current_user.is_secretary? %>
+      <th>Οριστικοποίηση</th>
+    <% end %>
+    <th>Ελεγμένο;</th>
+    <th>review notes</th>
+  </tr>
+    <% @submissions.each do |submission| %>
+      <tr>
+        <td>
+          <span title="αριθμός λογαριασμού στην πλατφόρμα">
+            <small><%= submission.user.id %></small>
+          </span>
+        </td>
+        <td style="max-width: 400px;">
+          <% if submission.user.team %>
+            <%= link_to submission.user.team.school.name, 
+              secretary_show_team_path(submission.user.team),
+              class: "link-secondary link-underline-secondary"
+            %>
+        <% else %>
+              Δεν έχει επιλεγεί σχολείο για αυτόν τον λογαριασμό
+              <% next %>
+        <% end %>
+          <br/>
+          <span title="Έχει υποβάλλει οριστικά για το Σεμινάριο;">
+            Σεμινάριο:
+          </span>
+            <% if submission.user.team.seminar_participation_finalized? %>
+              <span class="badge text-bg-success" title="Έχει υποβάλει οριστική συμμετοχή στο σεμινάριο.">
+                ΝΑΙ
+              </span>
+            <% else %>
+              <% if submission.submission_type.submission_type =~ /Σεμινάριο Φωτογραφίας/ %>
+                <span class="badge text-bg-warning" title="Έχει ανεβάσει σχετικό αρχείο, αλλά δεν έχει υποβάλλει το αίτημα">
+                  εκκρεμεί
+                </span>
+              <% end %>
+            <% end %>
+            <br />
+          <span title="Έχει υποβάλλει οριστικά για το Διαγωνισμό;">
+            Διαγωνισμό:
+          </span>
+            <% if submission.user.team.participation_finalized? %>
+              <span class="badge text-bg-success" title="Έχει υποβάλει οριστική συμμετοχή στο διαγωνισμό.">
+                ΝΑΙ
+              </span>
+            <% else %>
+              -
+            <% end %>
+        </td>
+        <% if not current_user.is_secretary? %>
+          <td style="max-width: 400px;">
+          <span title="Δηλωμένο"><%= submission.user.team.contact_email %></span>,
+          <span title="Επίσημο"><%= submission.user.team.school.contact_email %></span>,
+          <span title="Πλατφόρμας"><%= submission.user.email %></span>,
+          <% submission.user.teachers.each do |teacher|  %>
+            <% next if not teacher.finalized? %>
+            <span title="Εκπαιδευτικού"><%= teacher.person.contact_email %></span>,
+          <% end %>
+          </td>
+          <td> 
+            <span title="Δηλωμένο"><%= submission.user.team.contact_phone %></span>  <br />
+            <span title="Επίσημο"><%= submission.user.team.school.contact_phone %></span> 
+          </td>
+        <% end %>
+        <td>
+          <% if submission.finalized? %>
+            <span class="badge text-bg-success">ΟΡΙΣΤ</span>
+          <% else %>
+            <span class="badge text-bg-warning">μη οριστ</span>
+          <% end %>
+          <%= link_to submission.submission_type.submission_type, user_files_path( submission ),
+            target: "_blank" %>
+          <br />
+          <% if submission.submission_file.analyzed? %>
+            <% if submission.submission_file.content_type =~ /zip/ %>
+              ZIP Αρχεία: <%= submission.submission_file.metadata['file_count'] %>
+            <% elsif submission.submission_file.content_type =~ /pdf/ %>
+              PDF Σελίδες: <%= submission.submission_file.metadata['page_count'] %>
+            <% end %>
+          <% else %>
+              δεν έχει γίνει η ανάλυση του αρχείου
+          <% end %>
+          <br />
+          <% if submission.submission_description and submission.submission_description.strip != "" %>
+            <strong>Σημείωση: </strong><%= submission.submission_description %>
+          <% end %>
+        </td>
+        <% if current_user.is_admin? %>
+          <td>
+            <% if submission.finalized? %>
+              <%= button_to "αφαίρεση", unfinalize_submission_path(submission) %>
+            <% else %>
+              <%= button_to "οριστ.", make_final_submission_path(submission) %>
+            <% end %>
+          </td>
+        <% end %>
+        <td>
+          <%= render partial: "toggle_admin_index", locals:{ submission: submission } %>
+        </td>
+        <td>
+          <%= render partial: "reviewer_notes", locals:{ submission: submission } %>
+        </td>
+        <% if current_user.is_admin? %>
+          <td>
+              <%= link_to "προβολή", submission %>
+          </td>
+        <% end %>
+      </tr>
+    <% end %>
+</table>

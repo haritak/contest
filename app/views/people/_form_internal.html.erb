@@ -1,0 +1,79 @@
+<%# locals: (form:, person:, mode:) -%>
+<div class="container bg-body-secondary">
+  <div class="row">
+    <div class"col">
+      <% if person.errors.any? %>
+        <div class="alert alert-danger" role="alert">
+          <ul>
+            <% person.errors.each do |error| %>
+              <li><%= error.full_message %></li>
+            <% end %>
+          </ul>
+        </div>
+      <% end %>
+    </div>
+  </div><!-- error row -->
+
+  <div class="row">
+    <div class="col">
+      <strong><%= form.label :last_name, style: "display: block" %></strong>
+      <%= form.text_field :last_name, placeholder: "π.χ. Μαγειράκη", title: "Παρακαλούμε χρησιμοποιήστε σωστή στίξη" %>
+    </div>
+
+    <div class="col">
+      <strong><%= form.label :first_name, style: "display: block" %></strong>
+      <%= form.text_field :first_name, placeholder: "π.χ. Ναξία", title: "Παρακαλούμε χρησιμοποιήστε σωστή στίξη"  %>
+    </div>
+
+    <div class="col">
+      <strong><%= form.label :gender, style: "display: block" %></strong>
+      <%= form.collection_select :gender, Person.genders_translated, 
+        :first, :second, {include_blank: true} %>
+    </div>
+  </div>
+
+  <% if mode == :teacher %>
+        <%= form.hidden_field :father_name, value: "Εκπαιδευτικός" %>
+        <%= form.hidden_field :mother_name, value: "" %>
+  <% else %>
+    <div class="row">
+      <div class="col">
+        <%= form.label :father_name, style: "display: block" %>
+        <%= form.text_field :father_name, placeholder: "π.χ. Ευγένιος" %>
+      </div>
+      <div class="col">
+        <%= form.label :mother_name, style: "display: block" %>
+        <%= form.text_field :mother_name, placeholder: "π.χ. Ευθυμία" %>
+      </div>
+      <div class="col">
+      </div>
+    </div>
+  <% end %>
+
+
+  <% extra_style = "" %>
+  <% extra_text = "" %>
+  <% extra_style = "font-weight: bold;" if mode == :teacher %>
+  <% extra_text = "(*) Γονέα ή κηδεμόνα σε περίπτωση ανήλικου/ης" if mode == :student %>
+  <div class="row">
+    <div class="col">
+      <span title="<%= extra_text %>">
+        <%= form.label :contact_phone, style: "display: block; #{extra_style}" %> 
+        <%= form.telephone_field :contact_phone, placeholder: "π.χ. 6912345678" %>
+        <%= "*" if mode == :student %>
+      </span>
+    </div>
+    <div class="col">
+      <span title="<%= extra_text %>">
+        <%= form.label :contact_email, style: "display: block; #{extra_style}" %>
+        <%= form.email_field :contact_email, placeholder: "π.χ. example@example.com" %>
+        <%= "*" if mode == :student %>
+      </span>
+    </div>
+
+    <div class="col">
+      <%= extra_text %>
+    </div>
+  </div>
+
+</div> <!-- container -->

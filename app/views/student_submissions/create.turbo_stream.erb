@@ -1,0 +1,5 @@
+<%= turbo_stream.prepend "student_#{@student_submission.student.id}_submissions", 
+  partial: "student_submission", locals: {student_submission: @student_submission} %>
+
+<%= turbo_stream.update "student_#{@student_submission.student.id}_new_submission",
+  partial: "student_submissions_header", locals: {student: @student_submission.student} %>

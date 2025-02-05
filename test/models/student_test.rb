@@ -1,0 +1,34 @@
+# == Schema Information
+#
+# Table name: students
+#
+#  id                :bigint           not null, primary key
+#  finalized         :boolean          default(FALSE)
+#  finalized_counter :integer          default(0)
+#  guardian          :string(255)
+#  is_adult          :boolean          default(FALSE)
+#  mandatory_counter :integer          default(0)
+#  optional_counter  :integer          default(0)
+#  reviews_counter   :integer          default(0)
+#  created_at        :datetime         not null
+#  updated_at        :datetime         not null
+#  person_id         :bigint           not null
+#  school_class_id   :bigint           not null
+#
+# Indexes
+#
+#  index_students_on_person_id        (person_id)
+#  index_students_on_school_class_id  (school_class_id)
+#
+# Foreign Keys
+#
+#  fk_rails_...  (person_id => people.id)
+#  fk_rails_...  (school_class_id => school_classes.id)
+#
+require "test_helper"
+
+class StudentTest < ActiveSupport::TestCase
+  # test "the truth" do
+  #   assert true
+  # end
+end

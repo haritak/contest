@@ -1,0 +1,15 @@
+<%# locals (student_submission:) %>
+
+<%= turbo_frame_tag "finalize_state_for_ssid_#{student_submission.id}" do %>
+  <% if student_submission.finalized? %>
+    <small>
+      <%= button_to 'ΟΡΙΣΤ', unfinalize_student_submission_path(student_submission), class: "badge text-bg-success", title: "αφαίρεση οριστικοποίησης" %>
+    </small>
+  <% else %>
+    <small>
+      <%= button_to 'μη οριστ.', make_final_student_submission_path(student_submission), class: "badge text-bg-warning", title: "οριστικοποίηση του αρχείου" %>
+    </small>
+  <% end %>
+  <%# student_submission.finalized_date %>
+<% end %>
+

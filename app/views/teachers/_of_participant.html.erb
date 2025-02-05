@@ -1,0 +1,12 @@
+<div id="teachers">
+  <%= turbo_frame_tag "teachers_header" do %>
+    <%= render partial: "teachers/teachers_header", locals: {teachers: @teachers} %>
+  <% end %>
+
+  <%= turbo_frame_tag "team_teacher_members" do %>
+    <% @teachers.each do |t| %>
+      <%= render t if not t.finalized? %>
+    <% end %>
+  <% end %>
+</div>
+

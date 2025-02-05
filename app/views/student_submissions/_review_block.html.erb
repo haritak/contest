@@ -1,0 +1,35 @@
+<%# locals (student_submission:, edit_mode:) %>
+
+<%= turbo_frame_tag "review_block_of_ssid_#{student_submission.id}" do %>
+  <% notes = student_submission.review_notes %>
+  <% notes = "(χωρίς σημειώσεις)" if not notes or notes.empty? %>
+  <% if edit_mode %>
+    <%= form_with(model: student_submission, url: review_set_note_student_submission_path(student_submission)) do |form| %>
+      <%= form.text_area :review_notes %>
+      <%= form.submit "save" %> 
+    <% end %>
+  <% else %>
+    <%= button_to "#{notes}", review_edit_student_submission_path(student_submission), class: "btn btn-sm btn-link" %>
+  <% end %>
+  <% if student_submission.review_public %>
+    <%= button_to "δημόσιο", toggle_review_public_student_submission_path(student_submission), 
+      class: "btn btn-link link-success", title: "Η σημείωση φαίνεται στον ιδιοκτήτη του λογαριασμού" %> 
+  <% else %>
+    <%= button_to "κρυφό", toggle_review_public_student_submission_path(student_submission), 
+      class: "btn btn-link link-dark", title: "Η σημείωση ΔΕΝ φαίνεται στον ιδιοκτήτη του λογαριασμού" %> 
+  <% end %>
+  <% if student_submission.review_marked_ok? %>
+    <% if current_user.is_secretary? %>
+      <span class="badge text-bg-success">
+        ελεγμένο
+      </span>
+    <% else %>
+      <%= button_to "ελεγμένο", toggle_mark_ok_student_submission_path(student_submission), 
+        class: "btn btn-sm btn-outline-warning" %> 
+    <% end %>
+  <% else %>
+    <%= button_to "μη ελεγμένο", toggle_mark_ok_student_submission_path(student_submission),
+      class: "btn btn-sm btn-outline-primary" %> 
+  <% end %>
+<% end %>
+

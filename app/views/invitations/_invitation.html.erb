@@ -1,0 +1,27 @@
+<div id="<%= dom_id invitation %>">
+  <p>
+    <strong>User:</strong>
+    <%= invitation.user_id %>
+  </p>
+
+  <p>
+    <strong>Student:</strong>
+    <%= invitation.student %>
+  </p>
+
+  <p>
+    <strong>Link:</strong>
+    <%= invited_url(invitation.link) %>
+  </p>
+
+  <p>
+    <strong>Active:</strong>
+    <%= invitation.active %>
+  </p>
+
+  <p>
+    <strong>Submission type:</strong>
+    <%= invitation.submission_type_id %>
+  </p>
+
+</div>

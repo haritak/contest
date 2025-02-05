@@ -1,0 +1,11 @@
+<%= turbo_frame_tag "teachers_header" do %>
+  <div class="container mb-4 bg-body-secondary border border-secondary rounded">
+
+    <%= render partial: "teachers/teachers_static_header" %>
+
+    <h3> Προσθήκη εκπαιδευτικού </h3>
+    <%= render partial: "form", locals: {teacher: @teacher, person: @person} %>
+
+  </div>
+
+<% end %>

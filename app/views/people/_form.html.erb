@@ -1,0 +1,11 @@
+<%# locals: (person:, mode:) -%>
+<% if mode == :person %>
+  <%= form_with model: person do |form| %>
+    <%= render "people/form_internal", form: form, person: person, mode: mode %>
+    <%= form.submit %>
+  <% end %>
+<% else %>
+  <%= fields_for :person do |form| %>
+    <%= render "people/form_internal", form: form, person: person, mode: mode %>
+  <% end %>
+<% end %>

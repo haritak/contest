@@ -1,0 +1,5 @@
+<%= turbo_stream.append "user_submissions", 
+  partial: "submission", locals: {submission: @submission} %>
+
+<%= turbo_stream.update "user_submissions_header", partial: "submissions_header", 
+  locals: {current_user: current_user} %>

@@ -1,0 +1,26 @@
+<p style="color: green"><%= notice %></p>
+
+<h1>Σχολεία</h1>
+
+<%= link_to "Προσθήκη σχολείου", new_school_path %>
+
+<div id="schools">
+  <table class="table">
+    <tr>
+      <th>όνομα</th>
+      <th>τύπος</th>
+      <th>πόλη/χωριό</th>
+      <th>διεύθυνση εκπαίδευσης</th>
+      <th>ΕΑΕ;</th>
+      <th>τηλέφωνο</th>
+      <th>email</th>
+      <th>δημιουργήθηκε από</th>
+    </tr>
+
+  <% @schools.each do |school| %>
+    <tr>
+      <%= render school %>
+    </tr>
+  <% end %>
+</div>
+

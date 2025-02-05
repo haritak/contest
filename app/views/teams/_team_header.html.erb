@@ -1,0 +1,14 @@
+<% if teams.count == 0 %>
+  <%= render partial: "teams/static_header" %>
+  <div class="row mb-5">
+    <div class="col">
+      <%= link_to "συμπλήρωση", new_team_path, type: "button", class: "btn btn-success" %>
+    </div>
+    <div class="col">
+      <div class="alert alert-warning" role="alert">
+        Παρακαλούμε συμπληρώστε και οριστικοποιήστε τα στοιχεία του σχολείου σας.
+      </div>
+    </div>
+  </div>
+<% end %>
+

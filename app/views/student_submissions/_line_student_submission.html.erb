@@ -1,0 +1,26 @@
+<td><%= student_submission.student.person.user.team.school.name %></td>
+<td><%= student_submission.student_submission_type.name %></td>
+<td><%= student_submission.student.school_class.school_class %></td>
+<td><%= student_submission.student.person.short_name %></td>
+<td>
+  <%= student_submission.file.filename %>
+  <% if student_submission.file.attached? %>
+    <%= link_to student_submission.file, data: {turbo: false}, target: "_blank" do %> 
+      <% if student_submission.file.representable? %>
+        <%= image_tag student_submission.file.representation(resize_to_limit: [50,50]) %>
+      <% else %>
+        κατέβασμα
+      <% end %>
+    <% end %>
+  <% else %>
+    ERROR File missing!
+  <% end %>
+</td>
+<td><%= student_submission.title %></td>
+<td><%= student_submission.finalized %></td>
+<td><%= student_submission.notes %></td>
+<td>
+  <% if current_user.is_admin? %>
+    <%= link_to 'προβολή', student_submission %>
+  <% end %>
+</td>

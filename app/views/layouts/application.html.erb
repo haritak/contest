@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title><%= @site_setting.site_title %></title>
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <%= csrf_meta_tags %>
+    <%= csp_meta_tag %>
+
+    <%= stylesheet_link_tag "application", "data-turbo-track": "reload" %>
+    <%= javascript_importmap_tags %>
+
+    <!-- https://github.com/igorkasyanchuk/new_google_recaptcha -->
+    <%= yield :recaptcha_js %>
+  </head>
+
+  <body>
+    <nav class="navbar navbar-expand-lg bg-body-tertiary ">
+
+      <div class="container-fluid">
+
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+          <span class="navbar-toggler-icon"></span>
+        </button>
+
+        <div class="collapse navbar-collapse" id="navbarSupportedContent">
+
+          <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+
+
+
+            <% if user_signed_in? %>
+              <% if current_user.is_admin? %>
+                <li class="nav-item"><%= link_to 'Ρυθμίσεις', root_path, class: 'nav-link active' %></li>
+                <li class="nav-item"><%= link_to "Λογαριασμοί", users_url, class: 'nav-link active', data: {turbo_prefetch: false}   %></li>
+                <li class="nav-item"><%= link_to "Σχολεία", admin_index_teams_url, class: 'nav-link active', data: {turbo_prefetch: false}   %></li>
+                <li class="nav-item"><%= link_to "Εκπαιδευτικοί", admin_index_teachers_url, class: 'nav-link active', data: {turbo_prefetch: false} %></li>
+                <li class="nav-item"><%= link_to "Μαθητές", admin_index_students_url, class: 'nav-link active', data: {turbo_prefetch: false} %></li>
+                <li class="nav-item"><%= link_to "Αρχεία Σχολείων", admin_index_submissions_url, class: 'nav-link active', data: {turbo_prefetch: false} %></li>
+                <li class="nav-item"><%= link_to "Αρχεία Μαθητών", admin_index_student_submissions_url, class: 'nav-link active', data: {turbo_prefetch: false} %></li>
+
+                <li class="nav-item dropdown">
+                  <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                    Φωτογραφίες ανά κατηγορία
+                  </a>
+                  <ul class="dropdown-menu">
+                    <% StudentSubmissionType.optional.each do |ssot| %>
+                      <li class="nav-item"><%= link_to "Ενήλικες #{ssot.name}", review_index_path(:adult, ssot.id), class: 'nav-link active', data: {turbo_prefetch: false} %></li>
+                      <li class="nav-item"><%= link_to "Γυμνασίων #{ssot.name}", review_index_path(:gymnasium, ssot.id), class: 'nav-link active', data: {turbo_prefetch: false} %></li>
+                      <li class="nav-item"><%= link_to "Λυκείων #{ssot.name}", review_index_path(:lyceum, ssot.id), class: 'nav-link active', data: {turbo_prefetch: false} %></li>
+                    <% end %>
+                    <li class="nav-item"><%= link_to "Όλες", review_index_path(:all, 1), class: 'nav-link active', data: {turbo_prefetch: false} %></li>
+                  </ul>
+                </li>
+
+                <li class="nav-item dropdown">
+                    <%= render "tags/tags_menu" %>
+                </li>
+
+                <li class="nav-item dropdown">
+                  <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                    Ειδικές Κατηγορίες
+                  </a>
+                  <ul class="dropdown-menu">
+                    <% StudentSubmissionType.optional.each do |ssot| %>
+                      <li class="nav-item"><%= link_to "Ειδικών Σχολείων #{ssot.name}", review_index_path(:spedu, ssot.id), class: 'nav-link active', data: {turbo_prefetch: false} %></li>
+                    <% end %>
+                    <% StudentSubmissionType.optional.each do |ssot| %>
+                      <li class="nav-item"><%= link_to "Κοριτσιών #{ssot.name}", review_index_path(:girls, ssot.id), class: 'nav-link active', data: {turbo_prefetch: false} %></li>
+                      <li class="nav-item"><%= link_to "Αγοριών #{ssot.name}", review_index_path(:boys, ssot.id), class: 'nav-link active', data: {turbo_prefetch: false} %></li>
+                    <% end %>
+                  </ul>
+                </li>
+
+
+                <li class="nav-item"><%= link_to "Απεσταλμένα emails", sent_emails_index_url, class: 'nav-link active' %></li>
+                <li class="nav-item"><%= link_to "Sidekiq", sidekiq_web_url, target: "_blank", class: 'nav-link active' %></li>
+              <% elsif current_user.is_secretary? %>
+                <li class="nav-item"><%= link_to 'Αρχική', root_path, class: 'nav-link active' %></li>
+                <li class="nav-item"><%= link_to "Σχολεία", admin_index_teams_url, class: 'nav-link active', data:{turbo_prefetch: false}   %></li>
+                <li class="nav-item"><%= link_to "Εκπαιδευτικοί", admin_index_teachers_url, class: 'nav-link active', data:{turbo_prefetch: false} %></li>
+                <li class="nav-item"><%= link_to "Αρχεία Σχολείων", admin_index_submissions_url, class: 'nav-link active', data:{turbo_prefetch: false} %></li>
+                <li class="nav-item"><%= link_to "Αρχεία Μαθητών", admin_index_student_submissions_url, class: 'nav-link active', data: {turbo_prefetch: false} %></li>
+                <li class="nav-item dropdown">
+                  <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                    Φωτογραφίες ανά κατηγορία
+                  </a>
+                  <ul class="dropdown-menu">
+                    <% StudentSubmissionType.optional.each do |ssot| %>
+                      <li class="nav-item"><%= link_to "Ενήλικες #{ssot.name}", review_index_path(:adult, ssot.id), class: 'nav-link active', data: {turbo_prefetch: false} %></li>
+                      <li class="nav-item"><%= link_to "Γυμνασίων #{ssot.name}", review_index_path(:gymnasium, ssot.id), class: 'nav-link active', data: {turbo_prefetch: false} %></li>
+                      <li class="nav-item"><%= link_to "Λυκείων #{ssot.name}", review_index_path(:lyceum, ssot.id), class: 'nav-link active', data: {turbo_prefetch: false} %></li>
+                    <% end %>
+                    <li class="nav-item"><%= link_to "Όλες", review_index_path(:all, 1), class: 'nav-link active', data: {turbo_prefetch: false} %></li>
+                  </ul>
+                </li>
+              <% elsif current_user.is_reviewer? %>
+                <li class="nav-item"><%= link_to 'Αρχική', root_path, class: 'nav-link active' %></li>
+                <li class="nav-item dropdown">
+                  <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                    Φωτογραφίες ανά κατηγορία
+                  </a>
+                  <ul class="dropdown-menu">
+                    <% StudentSubmissionType.optional.each do |ssot| %>
+                      <li class="nav-item"><%= link_to "Ενήλικες #{ssot.name}", review_index_path(:adult, ssot.id), class: 'nav-link active', data: {turbo_prefetch: false} %></li>
+                      <li class="nav-item"><%= link_to "Γυμνασίων #{ssot.name}", review_index_path(:gymnasium, ssot.id), class: 'nav-link active', data: {turbo_prefetch: false} %></li>
+                      <li class="nav-item"><%= link_to "Λυκείων #{ssot.name}", review_index_path(:lyceum, ssot.id), class: 'nav-link active', data: {turbo_prefetch: false} %></li>
+                    <% end %>
+                    <li class="nav-item"><%= link_to "Όλες", review_index_path(:all, 1), class: 'nav-link active', data: {turbo_prefetch: false} %></li>
+                  </ul>
+                </li>
+                <li class="nav-item dropdown">
+                    <%= render "tags/tags_menu" %>
+                </li>
+              <% else %>
+                <li class="nav-item">
+                  <%= link_to 'Σελίδα υποβολής', root_path, class: 'nav-link active' %>
+                </li>
+                <% team = current_user.team %>
+                <li class="nav-item">
+                  <%= link_to "Αρχεία Σχολ. Μοναδ.", submissions_url, class: 'nav-link active' %>
+                </li>
+                <li class="nav-item">
+                  <%= link_to 'Εκπαιδευτικοί', teachers_path, method: :get, class: 'nav-link active' %>
+                </li>
+                <!--
+                <li class="nav-item">
+                  <%# link_to 'Μαθητές/Μαθήτριες', students_path, method: :get, class: 'nav-link active' %>
+                </li>
+                <li class="nav-item">
+                  <%# link_to 'Αρχεία Μαθητών', student_submissions_path, method: :get, class: 'nav-link active' %>
+                </li>
+                -->
+              <% end %>
+              <li class="nav-item dropdown">
+                <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                  <%= "#{current_user.email} - #{current_user.username}#{current_user.is_admin? ? '(admin)' : '' }" %>
+                </a>
+                <ul class="dropdown-menu">
+                  <li> <%= button_to "Αποσύνδεση" , destroy_user_session_path, method: :delete, class: 'dropdown-item' %> </li>
+                </ul>
+              </li>
+            <% end %>
+
+          </ul> <!--navbar -->
+        </div> <!-- collapse navbar-collapse -->
+      </div> <!-- div container fluid --->
+    </nav> <!-- nav class navbar -->
+
+    <!-- added based on devise -->
+    <% if notice %>
+      <div class="alert alert-success" role="alert">
+        <p class="notice"><%= notice %></p>
+      </div>
+    <% end %>
+    <% if alert %>
+      <div class="alert alert-danger" role="alert">
+        <p class="alert"><%= alert %></p>
+      </div>
+    <% end %>
+
+
+
+    <%= yield %>
+
+    <div class="container text-center">
+      <div class="row">
+        <code>
+          Υπόστηριξη για θέματα πλατφόρμας: <%= mail_to "support@3rd-photocontest.pdekritis.gr" %>, <%= phone_to "2810347286" %>
+        </code>
+      </div>
+      <div class="row">
+        <div class="col">
+          <% if Rails.env.development? %>
+            <div class="alert alert-danger" role="alert">
+              <p class="alert">ο εξυπηρετητής λειτουργεί σε κατάσταση ανάπτυξης, παρακαλώ ελάτε αργότερα!</p>
+            </div>
+          <% end %>
+        </div>
+      </div>
+    </div>
+  </body>
+</html>

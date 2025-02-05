@@ -1,0 +1,59 @@
+<%= turbo_frame_tag teacher do %>
+  <div class="container m-2">
+    <div class="row">
+      <div class="col-7">
+        <div class="card">
+          <div class="card-body">
+            <h4 class="card-title">
+              <%= Teacher.team_roles_translated[teacher.team_role.to_sym] %>
+            </h4>
+            <%= render "people/person", person: teacher.person %>
+            <% if teacher.speciality %>
+              <%= teacher.speciality.code %> (ειδικότητα <%= teacher.speciality&.description %>)
+            <% end %>
+            <% if teacher.gdpr_accepted? %>
+              <!-- (gdpr ok) -->
+            <% end %>
+          </div> <!-- card body -->
+        </div> <!-- card -->
+      </div><!--column-->
+      <div class="col-1">
+        <% if not teacher.finalized? and current_user and not current_user.is_admin? %>
+          <%= button_to "οριστικοποίηση", 
+            make_final_teacher_path(teacher), 
+            class: "btn btn-success", 
+            form: {data: { turbo_confirm: 'Να προχωρήσω στην οριστικοποίηση;',
+                           turbo_frame: "_top"}} %>
+                         <%= link_to "Διόρθωση", edit_teacher_path(teacher), type: "button", class: "btn btn-link link-dark" %>
+                         <%= button_to "Διαγραφή", teacher, method: :delete, type: "button", class: "btn btn-link link-danger", form: {data: { turbo_confirm: 'Να προχωρήσω στην διαγραφή;' }} %>
+                       <% else %>
+                         <!-- [έχει οριστικοποιηθεί] -->
+                         <% if @site_setting.enable_coadmin? %>
+                           <% if teacher.person.contact_email != current_user.email %>
+                             <div class="container d-flex justify-content-center m-2">
+                               <div class="d-flex justify-content-center m-3">
+                                 <% if teacher.person.contact_email and !teacher.person.contact_email.empty? %>
+                                   <% if teacher.coadmin? %>
+                                     <% btn_msg = "ενεργή" %>
+                                     <% btn_style = "btn-outline-success" %>
+                                     <% title_msg = "Ο/η #{teacher.person.short_name} μετά την σύνδεσή του/της θα μετατραπεί σε #{current_user.email}" %>
+                                   <% else %>
+                                     <% btn_msg = "ανενεργή" %>
+                                     <% btn_style = "btn-outline-dark" %>
+                                     <% title_msg = "Ενεργοποιήστε την συνδιαχείριση ώστε ο/η #{teacher.person.short_name} να μπορεί μετά την σύνδεσή του/της να μετατραπεί αυτόματα σε #{current_user.email}" %>
+                                   <% end %>
+                                   <span title="<%= title_msg %>">
+                                   <%= button_to "Συνδιαχείριση #{btn_msg}", toggle_coadmin_teacher_path(teacher),
+                                     class: "btn btn-sm #{btn_style}" %>
+                                   </span>
+                                 <% else %>
+                                 <% end %>
+                               </div>
+                             </div>
+                           <% end %>
+                         <% end %>
+                       <% end %>
+      </div>
+    </div> <!-- row -->
+  </div> <!-- container -->
+<% end %>

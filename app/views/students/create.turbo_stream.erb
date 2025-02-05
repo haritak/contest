@@ -1,0 +1,3 @@
+<%= turbo_stream.prepend "team_student_members", partial: "line_student", locals: {student: @student, no_student_mandatory_submission_types: StudentSubmissionType.mandatory.count} %>
+<%= turbo_stream.update "students_header", partial: "students_header", locals: {students: current_user.students} %>
+

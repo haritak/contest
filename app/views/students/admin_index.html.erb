@@ -1,0 +1,36 @@
+<div id="students" class="container my-3">
+
+  <%= @students.count %> μαθητές και μαθήτριες
+
+  <table class="table table-striped table-hover">
+    <tr>
+      <th> stid </th>
+      <th> Σχολείο </th>
+      <th> τάξη </th>
+      <th> ενήλικος </th>
+      <th> επώνυμο </th>
+      <th> όνομα </th>
+      <th> πατρώνυμο </th>
+      <th> μητρώνυμο </th>
+      <th> λογαριασμός </th>
+      <th> ενέργειες </th>
+    </tr>
+    <% @students.each do |student| %>
+      <tr>
+        <td><%= student.id %></td>
+        <td><%= student.school&.name %></td>
+        <td><%= student.school_class.school_class %> </td>
+          <td><%= student.is_adult? ? "ενήλικος" : "ανήλικος" %></td>
+          <td><%= student.person.last_name %></td>
+          <td><%= student.person.first_name %></td>
+          <td><%= student.person.father_name %></td>
+          <td><%= student.person.mother_name %></td>
+          <td><%= student.user.email %></td>
+          <td>
+            <%= link_to "προβολή", student_path(student) %>
+          </td>
+      </tr>
+    <% end %>
+  </table>
+</div>
+

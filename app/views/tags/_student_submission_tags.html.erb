@@ -1,0 +1,41 @@
+<%= turbo_frame_tag "tags_for_#{student_submission.id}" do %>
+  <div class="container border-top">
+    <div class="row">
+      <div class="col">
+        <% student_submission.student_submission_user_tags.each do |ssut| %>
+          <% next if current_user.is_reviewer? and ssut.user != current_user %>
+          <span title="<%= ssut.tag.description %>">
+            <%= button_to delete_selected_tag_student_submission_path(student_submission, 
+                                                                      ssu_tag_id: ssut.id), method: :delete,
+                                                                     style: "color: #{ssut.tag.color}", class: "badge", form: {class: "d-inline"} do %>
+                                                                     <%= ssut.tag.name %>
+                                                                     <% if ssut.user != current_user %>
+                                                                       <small>(<%= ssut.user.email %>)</small>
+                                                                     <% end %>
+                                                                   <% end %>
+          </span>
+        <% end %>
+      </div>
+    </div>
+    <div class="row my-1">
+      <%= button_to "τρέχουσα", 
+        apply_active_tag_student_submission_path(student_submission), 
+        class: "btn btn-sm btn-outline-dark border-0" %>
+    </div>
+    <div class="row my-1">
+      <div class="dropdown">
+        <button class="btn btn-sm btn-outline-dark dropdown-toggle border-0 m-1" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+          άλλη
+        </button>
+        <ul class="dropdown-menu">
+          <% @tags_to_show.each do |tag| %>
+            <li class="dropdown-item">
+              <%= button_to "#{tag.name}", apply_specific_tag_student_submission_path(student_submission, specific_tag_id: tag.id), class: "btn btn-sm", style: "color: #{tag.color}" %>
+            </li>
+          <% end %>
+        </ul>
+      </div>
+    </div>
+  </div>
+<% end %>
+

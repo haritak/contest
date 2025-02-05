@@ -1,0 +1,50 @@
+<% if @team %>
+  <div class="container">
+    <div class="row">
+      <div class="col d-flex justify-content-center">
+        <h1>Επιβεβαίωση δημιουργίας λογαριασμού</h1>
+        <% if @team.school_approved? %>
+          <p> Έχει γίνει ήδη η επιβεβαιώση. </p>
+          <p> Ευχαριστούμε πολύ </p>
+        <% end %>
+      </div>
+    </div>
+  </div>
+  <div class="container border">
+    <div class="row">
+      <div class="col d-flex justify-content-center">
+        <%= render @team %>
+      </div>
+    </div>
+    <% if not @team.school_approved? %>
+      <div class="row my-2">
+        <div class="col d-flex justify-content-center">
+          <p>
+          Παρακαλούμε πατήστε στο κουμπί "Επιβεβαίωση" για να επιβεβαιώσετε
+          την <strong>δημιουργία λογαριασμού</strong> στην πλατφόρμα διαχείρισης διαγωνισμών της ΠΔΕ Κρήτης.
+          </p>
+
+        </div>
+      </div>
+      <div class="row my-5">
+        <div class="col d-flex justify-content-center">
+          <%= button_to "Επιβεβαίωση", 
+            perform_school_approval_teams_url(@team.school_approval_secret),
+            type: "button", class: "btn btn-success", data: {turbo: false}%>
+        </div>
+      </div>
+      <div class="row my-5">
+        <div class="col d-flex justify-content-center">
+          <p>
+          <small>
+            Περισσότερες πληροφορίες στην ιστοσελίδα του διαγωνισμού:<br/>
+            <%= link_to "3ος Παγκρήτιος Μαθητικός Διαγωνισμός Ψηφιακής Φωτογραφίας", "https://3rd-photocontest.pdekritis.gr",
+            target: "_blank" %>
+          </small>
+          </p>
+        </div>
+      </div>
+    <% end %>
+  </div>
+<% end %>
+

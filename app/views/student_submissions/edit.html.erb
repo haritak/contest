@@ -1,0 +1,14 @@
+<h1>Editing student submission</h1>
+
+<%= turbo_frame_tag @student_submission do %>
+  <div class="container my-2 bg-body-secondary border border-secondary rounded">
+    <%= render "form", student_submission: @student_submission %>
+  </div>
+<% end %>
+
+<br>
+
+<div>
+  <%= link_to "Show this student submission", @student_submission %> |
+  <%= link_to "Back to student submissions", student_submissions_path %>
+</div>

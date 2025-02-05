@@ -1,0 +1,12 @@
+<p style="color: green"><%= notice %></p>
+
+<%= turbo_frame_tag "team_header" do %>
+  <%= render @team %>
+<% end %>
+
+<div>
+  <%= link_to "Edit this team", edit_team_path(@team) %> |
+  <%= link_to "Back to teams", teams_path %>
+
+  <%= button_to "Destroy this team", @team, method: :delete %>
+</div>

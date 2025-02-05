@@ -1,0 +1,88 @@
+<div id="<%= dom_id team %>">
+  <td> <%= team.id %> </td>
+  <td> <%= team.user.email %> </td>
+  <td> <strong><%= team.school.name %></strong> 
+    <small>(sid: <%= team.school.id %>)</small> 
+    <ul>
+      <li> Δηλωμένο: <%= link_to "#{number_to_phone team.contact_phone}", "tel:#{team.contact_phone}"%> </li>
+      <li> Επίσημο: <%= link_to "#{number_to_phone team.school.contact_phone}", "tel:#{team.school.contact_phone}"%> </li>
+    </ul>
+    <ul>
+      <li> Δηλωμένο: <%= link_to team.contact_email, "email:#{team.contact_email}"%> </li>
+      <li> Επίσημο: <%= link_to team.school.contact_email, "email:#{team.school.contact_email}"%> </li>
+    </ul>
+  </td>
+  <td>
+    <% if not team.seminar_participation_finalized? %>
+      <% if team.user.submissions.count > 1 %>
+        <span class="badge text-bg-warning" title="Έχει ανεβάσει σχετικό αρχείο, αλλά δεν έχει υποβάλλει το αίτημα">
+          εκκρεμεί
+        </span>
+      <% else %>
+          -
+      <% end %>
+    <% else %>
+        <span class="badge text-bg-success" title="Η συμμετοχή στο σεμινάριο έχει οριστικοποιηθεί">
+          ναι
+        </span>
+    <% end %>
+  </td>
+  <td>
+    <% if team.participation_finalized? %>
+      <span class="badge text-bg-success" title="Η συμμετοχή στο διαγωνισμό έχει οριστικοποιηθεί">
+        ναι
+      </span>
+    <% else %>
+      -
+    <% end %>
+  </td>
+  <% if current_user.is_admin? %>
+    <td>
+      <% if team.school_approved? %>
+        <p class="alert alert-success">ΟΚ</p>
+      <% else %>
+        <span title="<%= team.updated_at %>"> 
+          <p class="alert alert-warning">εκκρεμεί η επιβεβαίωση του σχολείου  </p>
+        </span>
+      <% end %>
+      <% if team.school_approval_secret and current_user.is_admin?%>
+        <p>
+        <%= link_to "Σύνδεσμος", school_approval_teams_url(team.school_approval_secret), target: "_blank" %> 
+        <span title="<%= team.school.contact_email %>">
+          <%= button_to "επ/λη στο σχολείο", resend_school_approval_team_url(team) %>
+        </span>
+        </p>
+      <% else %>
+        <p class="alert alert-warning">εκκρεμεί η οριστικοποίηση του σχολείου  </p>
+      <% end %>
+    </td>
+    <td> <%= link_to "Διόρθωση", edit_team_path(team) %></td>
+    <td> 
+      <span title="ο χρήστης θα πρέπει να επιλέξει ξανά σχολείο">
+        <%= button_to "Διαγραφή", team, method: :delete, 
+          form: {data: { turbo_confirm: 'Να προχωρήσω στην διαγραφή; Ο χρήστης θα πρέπει να επιλέξει ξανά σχολείο.' }}%>
+      </span>
+    </td>
+    <td>
+      <% if team.finalized? %>
+        <%= button_to 'Αφαίρεση οριστικοποίησης (στοιχείων σχολείου)', unfinalize_team_path(team) %>
+      <% else %>
+        <%= button_to "οριστικοποίηση", make_final_team_path(team) %>
+      <% end %>
+    </td>
+    <td>
+      <% if team.seminar_participation_finalized? %>
+        <%= button_to 'Αφαίρεση οριστικοποίησης σεμιναρίου', unfinalize_participation_to_seminar_user_path(team.user) %>
+      <% else %>
+        <%= button_to 'οριστικοποίησης σεμιναρίου', make_participation_to_seminar_final_user_path(team.user) %>
+      <% end %>
+    </td>
+    <td>
+      <% if team.participation_finalized? %>
+        <%= button_to 'Αφαίρεση οριστικοποίησης συμμετοχής', unfinalize_participation_user_path(team.user) %>
+      <% else %>
+        <%= button_to 'οριστικοποίησης συμμετοχής', make_participation_final_user_path(team.user) %>
+      <% end %>
+    </td>
+  <% end %>
+</div>

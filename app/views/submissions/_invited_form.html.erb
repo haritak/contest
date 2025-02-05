@@ -1,0 +1,32 @@
+<%= fields_for :submission do |form| %>
+  <% if submission.errors.any? %>
+    <div class="alert alert-danger" role="alert">
+      <ul>
+        <% submission.errors.each do |error| %>
+          <li><%= error.full_message %></li>
+        <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+  <div class="container">
+    <div class="row">
+      <div class="col">
+        <% if submission.submission_file.attached? and submission.submission_file.persisted? %>
+          Τρέχων αρχείο: <%= link_to submission.submission_file.filename, submission.submission_file %>
+        <br/>
+      <% end %>
+      <%= form.file_field :submission_file, accept: 'application/pdf' %>
+      </div>
+      <div class="col">
+        Σημειώσεις<br/>
+        <%= form.text_area :submission_description %>
+      </div>
+      <div class="col">
+        Περιεχόμενο αρχείου<br/>
+        <%= form.collection_select :submission_type_id, SubmissionType.optional.all, 
+          :id, :submission_type, {include_blank: true} %> 
+      </div>
+    </div>
+  </div>
+<% end %>

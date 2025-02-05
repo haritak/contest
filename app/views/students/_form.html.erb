@@ -1,0 +1,41 @@
+<%= form_with(model: student) do |form| %>
+  <% if student.errors.any? %>
+    <div class="alert alert-danger" role="alert">
+      <ul>
+        <% student.errors.each do |error| %>
+          <li><%= error.full_message %></li>
+        <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+  <%= render "people/form", person: @person, mode: :student %>
+
+  <div class="container bg-body-secondary">
+    <div class="row">
+      <div class="col">
+        <%= form.label :guardian, style: "display: block" %>
+        <%= form.text_field :guardian, size: 30, placeholder: "π.χ. Ελευθεριώτη Σπυριδούλα"  %>
+      </div>
+    </div>
+
+    <div class="row">
+      <div class="col">
+        <strong><%= form.label :school_class, style: "display: block" %></strong>
+        <%= form.collection_select :school_class_id, SchoolClass.all, 
+          :id, :description, { include_blank: true } %>
+        <span title="Αφορά μόνο σχολεία γενικής παιδείας και όχι ειδικής."
+          <%= form.label :is_adult %><small><sup>*</sup></small>
+          <%= form.check_box :is_adult %>
+        </span>
+      </div>
+    </div>
+
+    <div class="row">
+      <div class="p-3 col">
+        <%= form.submit t(:submit), class: "btn btn-sm btn-outline-primary" %>
+        <%= link_to "Άκυρο", :back, class: "btn btn-sm btn-outline-danger" %>
+      </div>
+    </div>
+  </div> <!-- container -->
+<% end %>

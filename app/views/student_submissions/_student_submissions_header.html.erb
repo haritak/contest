@@ -1,0 +1,11 @@
+<span title="Προσθήκη νέου αρχείου">
+  <%= link_to "νέο αρχείο", new_submission_student_path(student), type: "button", class: "btn btn-outline-success" %>
+</span>
+<% missing_mandatory = student.student_submissions.mandatory.count < StudentSubmissionType.mandatory.count %>
+<% missing_optional = student.student_submissions.optional.count == 0 %>
+<% if missing_mandatory or missing_optional %>
+  <span class="fs-8 badge rounded-pill text-bg-warning" 
+        title="Λείπουν αρχεία ή δεν υπάρχει καμία φωτογραφία">
+    ελλειπής υποβολή
+  </span>
+<% end %>

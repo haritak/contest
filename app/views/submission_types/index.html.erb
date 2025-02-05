@@ -1,0 +1,13 @@
+<p style="color: green"><%= notice %></p>
+
+<h1>Submission types</h1>
+
+<div id="submission_types">
+  <table class="table">
+    <% @submission_types.each do |submission_type| %>
+      <%= render submission_type %>
+    <% end %>
+  </table>
+</div>
+
+<%= link_to "New submission type", new_submission_type_path %>

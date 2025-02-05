@@ -1,0 +1,47 @@
+<%# locals: (current_user:) -%>
+
+<% submissions = current_user.submissions %>
+
+<%= render partial: "submissions/static_submissions_header" %>
+
+<p>
+<% if current_user.submissions.finalized.count > 0 %>
+  Οριστικοποιημένα αρχεία σχολικής μονάδας: 
+  <%= link_to submissions_path, data: {turbo: false} do %>
+    <span class="btn btn-sm btn-outline-primary rounded-pill">
+      <%= current_user.submissions.finalized.count %>
+    </span>
+  <% end %>
+<% else %>
+  Δεν έχει οριστικοποιηθεί κανένα αρχείο σχολικής μονάδας.
+<% end %>
+</p>
+
+<div class="row">
+  <div class="col">
+    <% add_button_title = "" %>
+    <% add_button_state = "" %>
+    <% if !current_user.teachers or !current_user.teachers.any? {|t| t.finalized?} %>
+      <% add_button_title = "Πρέπει να οριστικοποιηθεί τουλάχιστον ένας εκπαιδευτικός" %>
+      <% add_button_state = "disabled" %>
+    <% end %>
+    <span title="<%= add_button_title %>">
+      <%= link_to "νέο αρχείο", new_submission_path, 
+        type: "button", class: "btn btn-success #{add_button_state}" %>
+    </span>
+  </div>
+  <div class="col">
+    <% SubmissionType.mandatory.each do |st| %>
+      <% if submissions.where( submission_type: st).count == 0 %>
+        <div class="alert alert-warning" role="alert">
+          Παρακαλούμε μεταφορτώστε το αρχείο που αντιστοιχεί στον τύπο "<%= st.submission_type %>"
+        </div>
+      <% end %>
+    <% end %>
+  </div>
+</div>
+<div class="row">
+  <div class="col">
+    <p/>
+  </div>
+</div>

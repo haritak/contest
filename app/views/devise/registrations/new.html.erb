@@ -1,0 +1,45 @@
+<!-- https://github.com/igorkasyanchuk/new_google_recaptcha -->
+<%= content_for :recaptcha_js do %>
+  <%= include_recaptcha_js %>
+<% end %>
+
+<div class="container">
+  <div class="row justify-content-md-center">
+    <div class="col col-lg-2">
+      <h2>Εγγραφή</h2>
+    </div>
+    <div class="col-md-auto">
+
+      <%= form_for(resource, as: resource_name, url: registration_path(resource_name), html: {data: {turbo: false}} ) do |f| %>
+        <%= render "devise/shared/error_messages", resource: resource %>
+
+        <div class="field">
+          <%= f.label :email %><br />
+          <%= f.email_field :email, autofocus: true, autocomplete: "email" %>
+        </div>
+
+        <div class="field">
+          <%= f.label :password %>
+          <% if @minimum_password_length %>
+            <em>(τουλάχιστον <%= @minimum_password_length %> χαρακτήρες με πεζά, κεφαλαία και αριθμούς)</em>
+          <% end %><br />
+          <%= f.password_field :password, autocomplete: "new-password" %>
+        </div>
+
+        <div class="field">
+          <%= f.label :password_confirmation %><br />
+          <%= f.password_field :password_confirmation, autocomplete: "new-password" %>
+        </div>
+
+        <!-- https://github.com/igorkasyanchuk/new_google_recaptcha -->
+        <%= recaptcha_action('checkout') %>
+
+        <div class="actions">
+          <%= f.submit "Εγγραφή" %>
+        </div>
+      <% end %>
+    </div>
+    <div class="col col-lg-2">
+      <%= render "devise/shared/links" %>
+    </div>
+  </div>

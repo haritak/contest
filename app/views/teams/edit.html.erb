@@ -1,0 +1,17 @@
+<h1>Διόρθωση στοιχείων επιλεγμένου σχολείου</h1>
+
+<% if current_user.is_admin? %>
+
+  <p>
+  Η επιλογή σχολείου είναι για τον χρήστη: <%= @team.user.email %>
+  </p>
+
+  <%= render "form", team: @team, selected_schools: @selected_schools %>
+
+<% else %>
+
+  <%= turbo_frame_tag "team_header" do %>
+    <%= render "form", team: @team, selected_schools: @selected_schools %>
+  <% end %>
+
+<% end %>

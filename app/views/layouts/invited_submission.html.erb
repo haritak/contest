@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Υποβολή Αρχείων Διαγωνισμού</title>
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <%= csrf_meta_tags %>
+    <%= csp_meta_tag %>
+
+    <%= stylesheet_link_tag "application", "data-turbo-track": "reload" %>
+    <%= javascript_importmap_tags %>
+
+    <!-- https://github.com/igorkasyanchuk/new_google_recaptcha -->
+    <%= yield :recaptcha_js %>
+  </head>
+
+  <body>
+    <!-- added based on devise -->
+    <% if notice and notice.strip != "" %>
+      <div class="alert alert-success" role="alert">
+        <p class="notice"><%= notice %></p>
+      </div>
+    <% end %>
+    <% if alert and alert.strip != "" %>
+      <div class="alert alert-danger" role="alert">
+        <p class="alert"><%= alert %></p>
+      </div>
+    <% end %>
+
+    <%= yield %>
+  </body>
+</html>

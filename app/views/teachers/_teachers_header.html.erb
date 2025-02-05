@@ -1,0 +1,47 @@
+<%# locals: (teachers:) -%>
+<%= render partial: "teachers/teachers_static_header" %>
+    <p>
+      <% if current_user.teachers.finalized.count == 3 %>
+        <%= link_to 'Όλοι οι εκπαιδευτικοί έχουν οριστικοποιηθεί.', teachers_path, data: {turbo: false} %>
+      <% else %>
+        <% if current_user.teachers.finalized.count == 0 %>
+          Δεν έχει οριστικοποιηθεί κανένας εκπαιδευτικός
+        <% else %>
+          Οριστικοποιημένοι/ες εκπ/κοι: 
+          <%= link_to  teachers_path, data: {turbo: false} do %>
+            <span class="btn btn-sm btn-outline-primary rounded-pill">
+              <%= current_user.teachers.finalized.count %>
+            </span>
+          <% end %>
+      <% end %>
+    <% end %>
+<div class="row">
+  <div class="col">
+    <% add_button_title = "" %>
+    <% add_button_state = "" %>
+    <% if !current_user.team or !current_user.team.finalized? %>
+      <% add_button_title = "Πρέπει να οριστικοποιηθούν τα στοιχεία του σχολείου" %>
+      <% add_button_state = "disabled" %>
+    <% end %>
+    <% if teachers.count < 3 %>
+      <span title="<%= add_button_title %>">
+        <%= link_to "προσθήκη εκπαιδευτικού", new_teacher_path, type: "button", class: "btn btn-success #{add_button_state}" %>
+      </span>
+    <% else %>
+      <!-- έχει συμπληρωθεί ο μέγιστος αριθμός εκπαιδευτικών -->
+    <% end %>
+  </div>
+  <div class="col">
+    <% if teachers.count == 0 %>
+      <div class="alert alert-warning" role="alert">
+        Παρακαλούμε προσθέστε και οριστικοποιήστε τουλάχιστον έναν/μία εκπαιδευτικό
+      </div>
+    <% end %>
+  </div>
+</div>
+<div class="row">
+  <div class="col">
+    <p/>
+  </div>
+</div>
+

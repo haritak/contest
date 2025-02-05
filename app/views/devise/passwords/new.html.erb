@@ -1,0 +1,26 @@
+<div class="container">
+  <div class="row justify-content-md-center">
+    <div class="col col-lg-2">
+      <h2>Επαναφορά κωδικού</h2>
+    </div>
+    <div class="col-md-auto">
+
+
+      <%= form_for(resource, as: resource_name, url: password_path(resource_name), html: { method: :post }) do |f| %>
+        <%= render "devise/shared/error_messages", resource: resource %>
+
+        <div class="field">
+          <%= f.label :email %><br />
+          <%= f.email_field :email, autofocus: true, autocomplete: "email" %>
+        </div>
+
+        <div class="actions">
+          <%= f.submit "Αποστολή οδηγιών για επανακαθορισμό κωδικού" %>
+        </div>
+      <% end %>
+    </div>
+    <div class="col col-lg-2">
+      <%= render "devise/shared/links" %>
+    </div>
+  </div>
+</div>

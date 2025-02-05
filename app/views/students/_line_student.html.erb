@@ -1,0 +1,84 @@
+<%# locals: (student:, no_student_mandatory_submission_types:) %>
+<%= turbo_frame_tag student do %>
+  <% if student.person.gender == "male" %>
+    <% bgcolor = "border-primary" %>
+  <% else %>
+    <% bgcolor = "border-danger" %>
+  <% end %>
+
+  <div class="row my-1 border <%= bgcolor %> rounded">
+    <% if current_user&.is_admin? %>
+      <div class="col"><%= student.person.user.team.school.name %></div>
+    <% end %>
+    <div class="col">
+      <% if student.mandatory_counter < no_student_mandatory_submission_types %>
+        <span class="badge rounded-pill text-bg-warning" title="Παρακαλούμε προσθέστε τα αρχεία που απαιτούνται">
+          λείπουν αρχεία
+        </span>
+      <% end %>
+      <% if student.optional_counter == 0 %>
+        <span class="badge rounded-pill text-bg-warning" title="Παρακαλούμε προσθέστε τουλάχιστον μία φωτογραφία">
+          χωρίς φωτο.
+        </span>
+      <% end %>
+      <% if student.finalized_counter < student.mandatory_counter + student.optional_counter %>
+        <span class="badge rounded-pill text-bg-warning" title="Παρακαλούμε οριστικοποιήστε τα αρχεία που έχετε υποβάλει">
+          μη οριστ.
+        </span>
+      <% end %>
+      <% if student.reviews_counter > 0 %>
+        <span class="badge rounded-pill text-wrap text-bg-info mt-1" title="Υπάρχουν σημειώσεις από την γραμματεία. Παρακαλώ δείτε τις σημειώσεις στα συγκεκριμένα αρχεία <%=student.person.tou_mathiti %>.">
+          απαιτείται ενέργεια
+        </span>
+      <% end %>
+    </div>
+    <div class="col"><%= student.school_class.description %></div>
+    <div class="col">
+      <%= student.person.short_name %>
+      <small>
+        <%# student.person.gender_to_s %>
+      <hr />
+      <em><%= student.adult_to_s %></em><br />
+      <%= student.person.father_name %> <%= student.person.mother_name %><br />
+      <%= student.guardian %>
+      </small>
+    </div>
+    <div class="col">
+      <a data-bs-toggle="collapse" href="#student_contact_info_<%= student.id %>" role="button" aria-expanded="false" aria-controls="student_contact_info_<%= student.id %>">
+        λεπτομέρειες επικοινωνίας
+      </a>
+      <div class="collapse" id="student_contact_info_<%= student.id %>">
+        Τηλέφωνο: <%= student.person.contact_phone %><br />
+        Email: <%= student.person.contact_email %>
+      </div>
+    </div>
+    <div class="col"> 
+      <small>
+      αρχεία: <%= student.mandatory_counter %><br/>
+      φωτό: <%= student.optional_counter %><br/>
+      </small>
+    </div>
+    <div class="col d-flex justify-content-center align-items-center">
+      <%= link_to "αρχεία και φωτ.", student, class: "btn btn-outline-success", data: {turbo: false} %> 
+      <span class="mx-1" title="Διόρθωση στοιχείων μαθητή/μαθήτριας">
+        <%= link_to "διόρ.", edit_student_path(student), type: "button", 
+          class: "btn btn-sm btn-outline-dark" %>
+      </span>
+      <span class="mx-1" title="Διαγραφή μαθητή/μαθήτριας">
+        
+        <% extra_message = "" %>
+        <% if student.finalized_counter > 0 %>
+          <% extra_message = "(Ενημερωτικά, #{student.person.o} #{student.person.mathitis} έχει ΟΡΙΣΤΙΚΟΠΟΙΗΜΕΝΑ αρχεία τα οποία επίσης θα αφαιρεθούν)" %>
+        <% end %>
+
+        <%= button_to "X", student, method: :delete,
+          class: "btn btn-sm btn-outline-danger", 
+          form: {data: { turbo_confirm: 
+                         "Να προχωρήσω στην διαγραφή #{student.person.tou_mathiti}: '#{student.person.short_name}'; " + 
+                         "ΠΡΟΣΟΧΗ! Θα διαγραφούν επίσης τα αρχεία #{student.person.tou_mathiti}. " +
+                         extra_message, turbo_frame: "_top" }} %>
+      </span>
+    </div>
+  </div>
+<% end %>
+

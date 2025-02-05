@@ -1,0 +1,33 @@
+<%# locals: (students:) -%>
+
+<%= render partial: "students/students_static_header" %>
+
+<div class="row">
+  <div class="col">
+    <% add_button_title = "" %>
+    <% add_button_state = "" %>
+    <% if !current_user.teachers or !current_user.teachers.any? {|t| t.finalized?} %>
+      <% add_button_title = "Πρέπει να οριστικοποιηθεί τουλάχιστον ένας/μία εκπαιδευτικός" %>
+      <% add_button_state = "disabled" %>
+    <% else %>
+      <% add_button_title = "Προσθήκη νέου μαθητή ή νέας μαθήτριας" %>
+    <% end %>
+    <span title="<%= add_button_title %>">
+      <% link_title = Time.now.sec.odd? ? "νέος μαθητής" : "νέα μαθήτρια" %>
+      <%= link_to link_title, new_student_path, type: "button", 
+        class: "btn btn-success #{add_button_state}" %>
+    </span>
+  </div>
+  <div class="col">
+    <% if students.count < 1 %>
+      <div class="alert alert-warning" role="alert">
+        Παρακαλούμε προσθέστε τουλάχιστον έναν μαθητή/μία μαθήτρια
+      </div>
+    <% end %>
+  </div>
+</div>
+<div class="row">
+  <div class="col">
+    <p/>
+  </div>
+</div>

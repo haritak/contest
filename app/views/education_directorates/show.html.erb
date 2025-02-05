@@ -1,0 +1,10 @@
+<p style="color: green"><%= notice %></p>
+
+<%= render @education_directorate %>
+
+<div>
+  <%= link_to "Edit this education directorate", edit_education_directorate_path(@education_directorate) %> |
+  <%= link_to "Back to education directorates", education_directorates_path %>
+
+  <%= button_to "Destroy this education directorate", @education_directorate, method: :delete %>
+</div>

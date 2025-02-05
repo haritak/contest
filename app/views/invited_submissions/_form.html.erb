@@ -1,0 +1,50 @@
+<%= form_with(model: invited_submission) do |form| %>
+
+  <% if invited_submission.errors.any? %>
+    <div class="alert alert-danger" role="alert">
+      <ul>
+        <% invited_submission.errors.each do |error| %>
+          <li><%= error.full_message %></li>
+        <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+  <% student_submission = invited_submission.student_submission %>
+
+  <% if student_submission and student_submission.errors.any? %>
+    <div class="alert alert-danger" role="alert">
+      <ul>
+        <% student_submission.errors.each do |error| %>
+          <li><%= error.full_message %></li>
+        <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+  <%= form.hidden_field :secret_url_part, value: @invitation.link %>
+
+  <div class="container">
+    <div class="row">
+      <div class="col">
+        Κατηγορία:
+        <%= form.collection_select :student_submission_type_id, StudentSubmissionType.optional, 
+        :id, :name, {include_blank: true} %>
+      </div>
+      <div class="col">
+        Τίτλος: <%= form.text_field :submission_description %>
+      </div>
+      <div class="col">
+        <%= form.file_field :submission_file %>
+      </div>
+      <div class="row">
+        <div class="col">
+          <%= form.submit "Υποβολή", class: "btn btn-link" %>
+          <%= link_to "Άκυρο", invited_submissions_path(secret_url_part: invitation.link), 
+            class: "btn btn-link link-danger" %>
+        </div>
+      </div>
+    </div>
+  </div>
+
+<% end %>

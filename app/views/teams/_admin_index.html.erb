@@ -1,0 +1,24 @@
+<table class="table table-striped table-hover">
+  <tr>
+    <th>teamid</th>
+    <th>Λογαριασμός Πλατφόρμας</th>
+    <th>Σχολείο</th>
+    <th>Σεμινάριο</th>
+    <th>Διαγωνισμός</th>
+    <% if current_user.is_admin? %>
+      <th>Σύνδεσμος για επιβεβαίωση σχολείου</th>
+      <th>Διόρθωση</th>
+      <th><span title="ο χρήστης θα πρέπει να επιλέξει ξανά σχολείο">Διαγραφή επιλογής</span></th>
+      <th>Οριστικοποίηση στοιχείων σχολείου</th>
+      <th>Οριστικοποίηση συμμετοχής στο σεμινάριο</th>
+      <th>Οριστικοποίηση συμμετοχής</th>
+      <th>άλλες ενέργειες</th>
+    <% end %>
+  </tr>
+  <% teams.each do |team| %>
+    <tr>
+      <%= render partial: "admin_team", locals: { team: team } %>
+    </tr>
+  <% end %>
+</table>
+

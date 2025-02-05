@@ -1,0 +1,50 @@
+<%# fields_for :school do |form| %>
+<%= form_for school do |form| %>
+  <% if school.errors.any? %>
+    <div style="color: red">
+      <h2><%= pluralize(school.errors.count, "error") %> prohibited this school from being saved:</h2>
+
+      <ul>
+        <% school.errors.each do |error| %>
+          <li><%= error.full_message %></li>
+        <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+  <table>
+    <tr>
+      <td colspan=2><center>Σχολείο</center></td>
+    </tr>
+    <tr>
+      <th><%= form.label "Τύπος σχολείου", style: "display: block" %></th>
+      <td><%= form.collection_select :school_type_id, SchoolType.all, :id, :school_type %></td>
+    </tr>
+    <tr>
+      <th><%= form.label "Διεύθυνση Εκπαίδευσης", style: "display: block" %></th>
+      <td><%= form.collection_select :education_directorate_id, EducationDirectorate.all, :id, :name %></td>
+    </tr>
+    <tr>
+      <th><%= form.label "Πόλη/Κωμόπολη/Χωριό", style: "display: block" %></th>
+      <td><%= form.text_field :city %></td>
+    </tr>
+    <tr>
+      <th><%= form.label "Ονομασία σχολείου", style: "display: block" %></th>
+      <td><%= form.text_field :name %></td>
+    </tr>
+    <tr>
+      <th><%= form.label "Είναι εαε;", style: "display: block" %></th>
+      <td><%= form.check_box :is_spedu %></td>
+    </tr>
+    <tr>
+      <th><%= form.label "Τηλέφωνο σχολείου", style: "display: block" %></th>
+      <td><%= form.text_field :contact_phone %></td>
+    </tr>
+    <tr>
+      <th><%= form.label "Email σχολείου", style: "display: block" %></th>
+      <td><%= form.text_field :contact_email %></td>
+    </tr>
+  </table>
+
+  <%= form.submit %>
+<% end %>

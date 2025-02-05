@@ -1,0 +1,54 @@
+<div class="container-fluid">
+
+  <h1>Σχολεία που έχουν οριστικοποιήσει τον λογαριασμό τους στην πλατφόρμα (<%= @teams.count %>)</h1>
+
+  <div class="row text-end m-1">
+    <div data-turbo-prefetch="false">
+      <% gf = GeneratedFile.where(user: current_user, purpose: "Teams::export_xlsx").last %>
+      <% if gf %>
+        <%= link_to "κατέβασμα xlsx που δημιουργήθηκε #{gf.updated_at}", download_exported_xlsx_teams_path, class: "link", data: {turbo: false} %>
+      <% else %>
+        δεν υπάρχει αρχείο
+      <% end %>
+      <%= link_to "έναρξη δημιουργίας xlsx", export_xlsx_teams_path, class: "btn btn-sm btn-outline-primary" %>
+    </div>
+  </div>
+
+
+  <div id="teams">
+    <%= render partial: "admin_index", locals: {teams: @teams} %>
+  </div>
+
+  <h1>Σχολεία που ο αντίστοιχος λογαριασμός δεν τα έχει επιλέξει οριστικά (<%= @not_finalized_teams.count %>)</h1>
+
+  <p>
+  Δεν έχουν προχωρήσει στην οριστικοποίση της επιλογής σχολείου
+  </p>
+
+  <div id="teams_not_finalized">
+    <%= render partial: "admin_index", locals: {teams: @not_finalized_teams} %>
+  </div>
+
+  <h1>Λογαριασμοί χωρίς σχολείο</h1>
+
+  <p>
+  Τα παρακάτω emails έχουν δημιουργήσει λογαριασμό στην πλατφόρμα,
+  αλλά δεν έχουν προχωρήσει στην επιλογή σχολικής μονάδας.
+  </p>
+
+  <table class="table">
+    <tr>
+      <th>
+        Χωρίς επιλογή σχολείου
+      </th>
+    </tr>
+    <% @user_no_team.each do |user| %>
+      <% next if user.is_admin? %>
+      <% next if user.is_secretary? %>
+      <tr>
+        <td><%= user.email %> </td>
+      </tr>
+    <% end %>
+  </table>
+
+</div>

@@ -1,0 +1,25 @@
+<%# locals: (submission:) %>
+
+<%= turbo_frame_tag "reviewer_notes_for_submission_#{submission.id}" do %>
+  <%= form_with(model: submission, url: save_review_notes_submission_path(submission)) do |form| %>
+    <div class="row">
+      <div class="col">
+        <div class="form-floating">
+          <%= form.text_area :reviewer_notes, 
+            class: "form-control", placeholder: "Σημειώσεις", id: "floatingTextarea_#{submission.id}" %><br/>
+            <label for="floatingTextarea_<%= submission.id %>">
+              <small>review notes</small>
+          </label>
+        </div>
+      </div>
+      <div class="col">
+        <%= form.submit "save" %> 
+        <small>
+          <small>
+            <%= submission.updated_at.localtime.strftime "%H:%M %d/%m/%y" %>
+          </small>
+        </small>
+      </div>
+    </div>
+  <% end %>
+<% end %>

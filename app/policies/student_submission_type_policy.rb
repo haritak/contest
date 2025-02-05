@@ -1,0 +1,3 @@
+class StudentSubmissionTypePolicy < SubmissionTypePolicy
+end
+

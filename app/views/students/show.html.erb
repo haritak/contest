@@ -1,0 +1,29 @@
+<%= render @student %>
+
+<div class="container d-flex justify-content-end my-2">
+  <div class="row d-flex justify-content-end">
+    <div class="d-flex justify-content-end mb-3">
+      <%# button_to "Διαγραφή #{@student.person.tou_mathiti}", @student, method: :delete,
+        class: "btn btn-link link-danger", 
+        form: {data: { turbo_confirm: "Να προχωρήσω στην διαγραφή; Θα διαγραφούν επίσης τα αρχεία του/της.", turbo_frame: "_top" }} %>
+    </div>
+  </div>
+</div>
+
+<div class="container d-flex justify-content-center my-2">
+  <div class="row d-flex justify-content-center">
+    <div class="d-flex justify-content-center mb-3">
+      <% if @site_setting.shut_down_previews? %>
+        <small><small>Η προεπισκόπηση φωτογραφιών έχει προσωρινά απενεργοποιηθεί για λόγους απόδοσης του εξυπηρετητή<br/></small></small>
+      <% end %>
+    </div>
+  </div>
+</div>
+
+<div class="container d-flex justify-content-center my-2">
+  <div class="row d-flex justify-content-center">
+    <div class="d-flex justify-content-center mb-3">
+      <%= link_to "Πίσω", :back, class: "btn btn-outline-success" %>
+    </div>
+  </div>
+</div>

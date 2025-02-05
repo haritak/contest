@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta content='text/html; charset=UTF-8' http-equiv='Content-Type' />
+  </head>
+  <body>
+    <h1>Σύνδεσμος για την υποβολή αρχείων</h1>
+
+    <p>Ο παρακάτω σύνδεσμος είναι <b>προσωπικός</b> και δεν θα 
+    πρέπει να χρησιμοποιηθεί από κανέναν / καμία άλλον / άλλη εκτός από 
+    <%= @invitation.student.person.ton %> <%= @invitation.student.person.mathiti %>
+    με τα παρακάτω στοιχεία: </p>
+
+    <h2>
+      <%= @invitation.student.person.to_s %>
+    </h2>
+
+    <p> Μπορείτε είτε να κάνετε κλικ εδώ: </p>
+
+    <h3>
+      <%= link_to "Σύνδεσμος", invited_url(@invitation.link) %>
+    </h3>
+
+    <p>είτε να αντιγράψετε και να επικολλήσετε τον παρακάτω σύνδεσμο σε κάποιο φυλλομετρητή: </p>
+    <p><%= invited_url(@invitation.link) %></p>
+  </body>
+</html>
+

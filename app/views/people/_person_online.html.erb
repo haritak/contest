@@ -1,0 +1,12 @@
+<div id="<%= dom_id person %>">
+  <td><%= person.last_name %></td>
+  <td><%= person.first_name %></td>
+  <td><%= person.father_name %></td>
+  <td><%= person.mother_name %></td>
+  <td><%= Person.genders_translated[person.gender.to_sym] %></td>
+  <td><%= phone_to person.contact_phone %></td>
+  <td><%= mail_to person.contact_email %></td>
+  <% if current_user&.is_admin? %>
+    <td><strong> Created by:</strong> <%= person.user.email %></td>
+  <% end %>
+</div>

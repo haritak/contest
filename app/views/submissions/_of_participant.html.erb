@@ -1,0 +1,15 @@
+<div id="submissions">
+
+  <%= turbo_frame_tag "user_submissions_header" do %>
+    <%= render partial:"submissions/submissions_header", locals: { current_user: current_user }%>
+  <% end %>
+
+  <%= turbo_frame_tag Submission.new %>
+
+  <%= turbo_frame_tag "user_submissions" do %>
+    <% @submissions.each do |s| %>
+      <%= render s if not s.finalized? %>
+    <% end %>
+  <% end %>
+
+</div>

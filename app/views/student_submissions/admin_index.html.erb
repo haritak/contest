@@ -1,0 +1,151 @@
+<div class="container-fluid">
+
+  <ul>
+    <li><%= @total_kids %> παιδιά</li>
+    <li><%= @total_adults %> ενήλικες</li>
+    <li><%= @total_kids_and_adults %> σύνολο</li>
+  </ul>
+
+  <div class="row m-1 text-center">
+    <div class="col" data-turbo-prefetch="false">
+      <center>
+        <%== pagy_nav(@pagy) if @pagy.pages > 1 %>
+      </center>
+    </div>
+  </div>
+
+  <table class="table table-striped table-hover" data-sticky-header="true">
+    <tr>
+      <th>uid-sid</th>
+      <th>Σχολείο</th>
+      <th>Ονο/πωνυμο</th>
+      <% @student_submission_types.mandatory.each do |ss_type| %>
+        <th>
+          <%= ss_type.name %>
+        </th>
+      <% end %>
+      <th>
+        Φωτογραφίες
+      </th>
+    </tr>
+
+    <% @students.each do |student| %>
+      <tr height="150px" >
+        <td><small><%=student.user.id %>-<%= student.id %></small></td>
+        <td style="max-width: 400px;">
+          <% if student.user.team %>
+            <%= student.user.team.school.name %>
+          <% else %>
+            δ/υ σχολείο!
+          <% end %>
+          <br/>
+          <% if student.school_class.school_type.school_type =~ /ΛΥΚΕΙΟ/ %>
+            ΛΥΚΕΙΟ
+          <% elsif student.school_class.school_type.school_type =~ /ΓΥΜΝΑΣΙΟ/ %>
+            ΓΥΜΝΑΣΙΟ
+          <% else %>
+            Αγνωστος τύπος σχολείου
+          <% end %>
+          <br/>
+          <small>
+            <a class="link link-primary" data-bs-toggle="collapse" href="#team_contact_for_student<%= student.id%>" role="button" aria-expanded="false" aria-controls="team_contact_for_student<%= student.id %>">
+              Στοιχεία επικοινωνίας σχολείου
+            </a>
+            <br/>
+            <div class="collapse" id="team_contact_for_student<%= student.id%>">
+              <%= student.user.team.contact_email %> <br/>
+              <%= student.user.team.contact_phone %> <br/>
+              <%= student.user.team.school.contact_email %> <br/>
+              <%= student.user.team.school.contact_phone %> <br/>
+            </div>
+            
+            <a class="link link-primary" data-bs-toggle="collapse" href="#teachers_contact_for_student<%= student.id%>" role="button" aria-expanded="false" aria-controls="teachers_contact_for_student<%= student.id %>">
+              Στοιχεία επικοινωνίας εκπ/κων
+            </a>
+            <br/>
+            <div class="collapse" id="teachers_contact_for_student<%= student.id%>">
+              <% student.user.teachers.each do |teacher| %>
+                <%= teacher.person.short_name %> <br/>
+                <%= teacher.person.contact_phone %> <br/>
+                <%= teacher.person.contact_email %> <br/>
+              <% end %>
+            </div>
+          </small>
+        </td>
+        <td>
+          <%= student.person.short_name %><br/>
+          Τάξη: <strong><%= student.school_class.school_class %></strong><br/>
+          <em><%= student.adult_to_s %><br/></em>
+          <small>
+            <small>
+              <a class="link link-primary" data-bs-toggle="collapse" href="#student<%= student.id%>" role="button" aria-expanded="false" aria-controls="student<%= student.id %>">
+                Κηδεμόνας
+              </a>
+              <br/>
+              <div class="collapse" id="student<%= student.id %>">
+                <%= student.guardian %> <br/>
+                <%= student.person.short_name %> <br/>
+                <%= student.person.contact_phone %> <br/>
+                <%= student.person.contact_email %> <br/>
+              </div>
+            </small>
+          </small>
+          <br />
+        </td>
+        <% @student_submission_types.each do |ss_type| %>
+          <%# Το order() σκοτώνει την απόδοση γιατί οδηγεί σε N+1 queries %>
+          <% this_submission_type_not_found = true %>
+          <% student.student_submissions.each do |ss| %>
+            <% next if ss.student_submission_type != ss_type %>
+
+            <% this_submission_type_not_found = false %>
+
+            <td class="text-center">
+              <% if ss.mandatory? %>
+                <%= link_to ss.student_submission_type.name, student_files_show_student_submission_path(ss), target: "_blank" %><br/>
+              <% else %>
+                <div class="border m-1">
+                  <%= ss.student_submission_type.name %>
+                  <br/>
+                  <% if @site_setting.shut_down_previews? %>
+                    <span title="Η προεπισκόπηση έχει απενεργοποιηθεί για λόγους απόδοσης του εξυπηρετητή">
+                      <small><small>[preview disabled]</small></small>
+                    </span>
+                  <% else %>
+                    <%= turbo_frame_tag "review_preview_of_#{ss.id}", src: thumbnail_student_submission_path(ss, thumb_size: 50), loading: :lazy do %>
+                      loading ...
+                    <% end %>
+                  <% end %>
+                <% end %>
+                <br />
+                <%= link_to student_files_preview_student_submission_path(ss) do %>
+                  <% if ss.title and ss.title.strip != "" %>
+                    <%= ss.title %>
+                  <% else %>
+                    δεν έχει τίτλο
+                  <% end %>
+                <% end %>
+                </div>
+                <br />
+
+                <%= render partial: "finalize_state", locals: {student_submission: ss} %>
+                <br />
+
+                <%= render partial: "review_block", locals: {student_submission: ss, edit_mode: false} %>
+                <br />
+
+            </td>
+          <% end %>
+          <% if this_submission_type_not_found %>
+            <td class="text-center">
+              <%= ss_type.name %> 
+              <br/>
+              (Δ/Υ)
+            </td>
+          <% end %>
+        <% end %>
+      </tr>
+    <% end %>
+  </table>
+</div>
+

@@ -1,0 +1,11 @@
+<h1>New invited submission</h1>
+
+<%= turbo_frame_tag "new_invited_submission" do %>
+  <%= render "form", invited_submission: @invited_submission, submission: @submission, invitation: @invitation %>
+<% end %>
+
+<br>
+
+<div>
+  <%# link_to "Back to invited submissions", invited_submissions_path(secret_url_part: @invited_submission.invitation.link) %>
+</div>

@@ -1,0 +1,12 @@
+<h1>Ενημέρωση στοιχείων σχολείου</h1>
+
+<%= form_with(model: @school) do |form| %>
+  <%= render "form", school: @school %>
+  <%= form.submit "ενημέρωση" %>
+<% end %>
+
+<br>
+
+<div>
+  <%= link_to "Επιστροφή", root_path %>
+</div>

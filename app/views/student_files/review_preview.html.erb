@@ -1,0 +1,12 @@
+<%= turbo_frame_tag "review_preview_of_#{@student_submission.id}" do %>
+  <div class="text-center">
+    <%= link_to student_files_preview_student_submission_path(@student_submission), target: "_blank" do %>
+      <%= image_tag @student_submission.file.representation(resize_to_limit: [@thumb_size, @thumb_size]) %>
+    <% end %>
+  </div>
+  <% if @thumb_size > 100 %>
+    <div class="text-center">
+      <%= @student_submission.title %>
+    </div>
+  <% end %>
+<% end %>

@@ -1,0 +1,11 @@
+<%= turbo_stream.append "invited_user_submissions", 
+  partial: "invited_submission", locals: {invited_submission: @invited_submission} %>
+
+<%= turbo_stream.update "new_invited_submission" do %>
+  <h3>
+    <%= link_to "Νέα υποβολή αρχείου", 
+      new_invited_submission_path(secret_url_part:@invitation.link),
+      class: "btn btn-outline-success"
+    %>
+  </h3>
+<% end %>

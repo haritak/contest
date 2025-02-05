@@ -1,0 +1,49 @@
+<%= form_with(model: submission_type) do |form| %>
+  <% if submission_type.errors.any? %>
+    <div style="color: red">
+      <h2><%= pluralize(submission_type.errors.count, "error") %> prohibited this submission_type from being saved:</h2>
+
+      <ul>
+        <% submission_type.errors.each do |error| %>
+          <li><%= error.full_message %></li>
+        <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+  <div>
+    <%= form.label :submission_type, style: "display: block" %>
+    <%= form.text_field :submission_type, size: 80 %>
+  </div>
+
+  <div>
+    <%= form.label :description, style: "display: block" %>
+    <%= form.text_area :description, size: 80 %>
+  </div>
+
+  <div>
+    <%= form.label :accepted_filetype, style: "display: block" %>
+    Examples:
+    <ul>
+      <li>application/pdf</li>
+      <li>application/pdf,application/zip</li>
+      <li>image/jpeg</li>
+      <li>image/jpeg,image/png</li>
+    </ul>
+    <%= form.text_field :accepted_filetype, size: 80 %>
+  </div>
+
+  <div>
+    <%= form.label :max_submissions, style: "display: block" %>
+    <%= form.number_field :max_submissions %>
+  </div>
+
+  <div>
+    <%= form.label :optional, style: "display: block" %>
+    <%= form.check_box :optional %>
+  </div>
+
+  <div>
+    <%= form.submit t(:submit) %>
+  </div>
+<% end %>

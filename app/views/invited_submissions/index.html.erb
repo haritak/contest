@@ -1,0 +1,39 @@
+<% if @invitation %>
+  <div class="container-fluid">
+          <div class="container">
+            <h4>Προσωπικός σύνδεσμος υποβολής αρχείων</h4>
+          </div>
+    <div class="card">
+      <div class="card-body">
+        <h5 class="card-title">
+          <%= render @invitation.student %>
+        </h5>
+        <div class="container">
+          <div class="row">
+            <div class="col">
+              <%= turbo_frame_tag "invited_user_submissions" do %>
+                <div id="invited_submissions">
+                  <ul class="list-group list-group-flush">
+                    <% @invited_submissions.each do |invited_submission| %>
+                      <li class="list-group-item">
+                        <%= render invited_submission %>
+                      </li>
+                    <% end %>
+                  </ul>
+                </div>
+              <% end %>
+              <%= turbo_frame_tag "new_invited_submission" do %>
+                <h3>
+                  <%= link_to "Νέα υποβολή αρχείου", 
+                    new_invited_submission_path(secret_url_part:@invitation.link),
+                    class: "btn btn-outline-success"
+                  %>
+                </h3>
+              <% end %>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+<% end %>

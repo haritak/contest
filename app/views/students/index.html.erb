@@ -1,0 +1,9 @@
+<div id="students" class="container my-3">
+  <table class="table">
+  <%= turbo_frame_tag "students_header" do %>
+    <%= render "students/students_header", students: @students %>
+  <% end %>
+  <%= turbo_frame_tag "team_student_members" do %>
+    <%= render @students %>
+  <% end %>
+</div>

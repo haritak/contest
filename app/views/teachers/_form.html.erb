@@ -1,0 +1,66 @@
+<%= form_with(model: teacher) do |form| %>
+  <% if teacher.errors.any? %>
+    <div class="alert alert-danger" role="alert">
+      <ul>
+        <% teacher.errors.each do |error| %>
+          <li><%= error.full_message %></li>
+        <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+  <%= render "people/form", person: @person, mode: :teacher %>
+
+  <div class="container">
+    <div class="row">
+      <div class="col">
+        <strong><%= form.label "Κλάδος/Ειδικότητα", style: "display: block" %></strong>
+        <%= form.collection_select :speciality_id, Speciality.order(code: :asc).all, :id, :to_s,
+          { include_blank: true } %>
+      </div>
+    </div>
+
+    <div class="row">
+      <div class="col">
+        <strong>
+          <%= form.label :team_role, style: "display: block" %>
+        </strong>
+        <% available_roles = [] %>
+        <% if not teacher.persisted? %> <!-- new teacher: select from available roles -->
+          <% Teacher.team_roles_translated.each do |tr| %>
+            <% if Teacher.joins(:person).where(person: {user: current_user}, team_role: tr[0]).count == 0 %>
+              <% available_roles << tr %>
+            <% end %>
+          <% end %>
+        <% else %>
+          <% available_roles = Teacher.team_roles_translated %>
+        <% end %>
+        <%= form.collection_select :team_role, available_roles, :first, :second %>
+      </div>
+    </div>
+
+    <div class="row">
+      <div class="col">
+        <p>
+        </p>
+        <strong>
+          Αποδοχή 
+          <span title="Με την εγγραφή μου στην πλατφόρμα του 3ου Παγκρήτιου Μαθητικού Διαγωνισμού Φωτογραφίας δηλώνω ότι συναινώ στη συλλογή και επεξεργασία των προσωπικών μου δεδομένων από τα μέλη του προσωπικού  της Περιφερειακής Διεύθυνσης Εκπαίδευσης Κρήτης που είναι υπεύθυνα για τη διαχείριση των διαδικασιών που απαιτούνται για την υλοποίηση του ανωτέρω διαγωνισμού.">
+          <%= link_to "Πολ. Προστ. Προσ. Δεδ.", 
+            "https://3rd-photocontest.pdekritis.gr/?page_id=141", target: "_blank" %>
+          </span>
+
+          <%= form.check_box :gdpr_accepted %>
+        </strong>
+      </div>
+    </div>
+
+    <div class="row">
+      <div class="p-3 col">
+        <%= form.submit t(:submit), class: "btn btn-sm btn-outline-primary" %>
+        <%= link_to "Άκυρο", teachers_path, class: "btn btn-sm btn-outline-danger" %>
+      </div>
+    </div>
+  </div> <!-- container -->
+
+<% end %>

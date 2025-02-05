@@ -1,0 +1,21 @@
+<div id="<%= dom_id school %>">
+  <td> <%= school.name %> </td>
+  <td> <%= school.school_type.school_type %> </td>
+  <td> <%= school.city %> </td>
+  <td> <%= school.education_directorate&.name %> </td>
+  <td> <%= school.is_spedu %> </td>
+  <% if current_user.is_admin? %>
+    <td> <%= school.contact_phone %></td>
+    <td>
+      <%= school.contact_email %>
+      <% if school.contact_email !~ URI::MailTo::EMAIL_REGEXP %>
+        INVALID
+      <% end %>
+    </td>
+    <td>
+      <%= school.user&.email %>
+    </td>
+    <td><%= link_to "Διόρθωση", edit_school_path(school) %></td>
+    <td><%= button_to "Διαγραφή", school, method: :delete %></td>
+  <% end %>
+</div>

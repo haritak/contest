@@ -1,0 +1,17 @@
+<%# locals: (submission:) %>
+
+<%= turbo_frame_tag "reviewing_submission_#{submission.id}" do %>
+  <% if submission.reviewed? %>
+    <% if current_user.is_secretary? %>
+      <span class="badge text-bg-success">
+        OK
+      </span>
+    <% else %>
+      <%= button_to "OK", toggle_reviewed_submission_path(submission), 
+        class: "btn btn-sm btn-outline-warning" %> 
+    <% end %>
+  <% else %>
+    <%= button_to "mark ok", toggle_reviewed_submission_path(submission),
+      class: "btn btn-sm btn-outline-primary" %> 
+  <% end %>
+<% end %>

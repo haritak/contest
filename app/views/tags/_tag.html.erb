@@ -1,0 +1,8 @@
+<div id="<%= dom_id tag %>" class="col d-flex align-items-center" style="color: <%= tag.color %>">
+
+  <strong> <%= tag.name %> : </strong> <%= tag.description %> created by user: <%= tag.user.email %>
+<%= tag.color %> <%= tag.is_global? ? "GLOBAL" : "local" %>
+  <%= link_to "Edit", edit_tag_path(tag), class: "btn btn-sm" %>
+  <%= button_to "Destroy", tag, method: :delete, class: "btn btn-sm" %>
+
+</div>

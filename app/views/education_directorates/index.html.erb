@@ -1,0 +1,14 @@
+<p style="color: green"><%= notice %></p>
+
+<h1>Education directorates</h1>
+
+<div id="education_directorates">
+  <% @education_directorates.each do |education_directorate| %>
+    <%= render education_directorate %>
+    <p>
+      <%= link_to "Show this education directorate", education_directorate %>
+    </p>
+  <% end %>
+</div>
+
+<%= link_to "New education directorate", new_education_directorate_path %>

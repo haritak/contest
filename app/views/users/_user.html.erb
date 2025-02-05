@@ -1,0 +1,27 @@
+<div id="<%= dom_id user %>">
+  <td>
+    <%= user.id %>
+  </td>
+  <td>
+    <%= user.is_admin? ? "ADMIN" : "" %> 
+    <%= user.is_secretary? ? "SECRETARY" : "" %> 
+    <%= user.is_reviewer? ? "REVIEWER" : "" %> 
+  </td>
+  <td> <%= user.email %> </td>
+  <td>
+    <% if not user.team %>
+      (δεν έχει επιλέξει σχολείο)
+    <% else %>
+      <%= user.team.school.name %>
+      <%= "(μη οριστ.)" if not user.team.finalized? %>
+    <% end %>
+  </td>
+
+  <td> <%= user.confirmation_sent_at %> </td>
+  <td> <%= user.current_sign_in_at %> </td>
+  <td> <%= user.current_sign_in_ip %> </td>
+  <td> <%= user.failed_attempts %> </td>
+  <td> <%= user.sign_in_count %> </td>
+  <td> <%= user.last_sign_in_at %> </td>
+  <td> <%= user.last_sign_in_ip %> </td>
+</div>

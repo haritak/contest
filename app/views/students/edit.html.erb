@@ -1,0 +1,8 @@
+<h1>Ενημέρωση στοιχείων</h1>
+
+<%= turbo_frame_tag @student do %>
+  <div class="container mb-4 bg-body-secondary border border-secondary rounded">
+    <h3>Διόρθωση <%= @student.person.tou_mathiti %></h3>
+    <%= render "form", student: @student %>
+  </div>
+<% end %>

@@ -1,0 +1,15 @@
+<div id="students">
+  <%= turbo_frame_tag "students_header" do %>
+    <%= render "students/students_header", students: @students %>
+  <% end %>
+
+  <% no_student_mandatory_submission_types = StudentSubmissionType.mandatory.count %>
+  <%= turbo_frame_tag "team_student_members" do %>
+    <% @students.each do |st| %>
+      <div class="container">
+        <%= render partial: "students/line_student", 
+          locals: {student: st, no_student_mandatory_submission_types: no_student_mandatory_submission_types } %>
+      </div>
+    <% end %>
+  <% end %>
+</div>
